@@ -11,6 +11,7 @@ import {
   HeartHandshake,
   CheckCircle,
   Database,
+  QrCode,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
@@ -19,8 +20,8 @@ import { CustomerProfileModal } from "@/components/CustomerProfileModal";
 import { OrderReceiptModal } from "@/components/OrderReceiptModal";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import { OrdersView } from "@/components/OrdersView";
-import { Product, CustomerProfile, CartItem, Order, OrderStatus } from "@/types";
-import { INITIAL_PRODUCTS, PALAKKAD_DELIVERY_ZONES } from "@/lib/sample-data";
+import { Product, CustomerProfile, CartItem, Order, OrderStatus, ShopSettings } from "@/types";
+import { INITIAL_PRODUCTS, PALAKKAD_DELIVERY_ZONES, DEFAULT_SHOP_SETTINGS } from "@/lib/sample-data";
 import {
   isSupabaseConfigured,
   getProducts,
@@ -39,6 +40,7 @@ export default function Home() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("എല്ലാം");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [shopSettings, setShopSettings] = useState<ShopSettings>(DEFAULT_SHOP_SETTINGS);
 
   // Customer Profile State
   const [customer, setCustomer] = useState<CustomerProfile>({
@@ -56,7 +58,7 @@ export default function Home() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
 
-  // Load Initial Data (from Supabase if configured, or localStorage fallback)
+  // Load Initial Data
   useEffect(() => {
     async function loadData() {
       if (isSupabaseConfigured) {
@@ -87,13 +89,22 @@ export default function Home() {
 
         const savedCart = localStorage.getItem("palakkad_eco_cart");
         if (savedCart) setCart(JSON.parse(savedCart));
+
+        const savedSettings = localStorage.getItem("palakkad_eco_settings");
+        if (savedSettings) setShopSettings(JSON.parse(savedSettings));
       } catch (e) {
-        console.error("Failed to load customer/cart", e);
+        console.error("Failed to load customer/cart/settings", e);
       }
     }
 
     loadData();
   }, []);
+
+  // Update Shop Settings
+  const handleUpdateShopSettings = (newSettings: ShopSettings) => {
+    setShopSettings(newSettings);
+    localStorage.setItem("palakkad_eco_settings", JSON.stringify(newSettings));
+  };
 
   // Sync products to Supabase & localStorage
   const handleAddProduct = async (newProd: Product) => {
@@ -219,7 +230,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col antialiased text-foreground selection:bg-emerald-100 selection:text-emerald-900">
-      {/* Navigation */}
+      {/* Navigation with PWA prompt & Announcement */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -228,6 +239,7 @@ export default function Home() {
         openCart={() => setIsCartOpen(true)}
         customer={customer}
         openProfile={() => setIsProfileOpen(true)}
+        announcement={shopSettings.announcement}
       />
 
       {/* Main Content Area */}
@@ -251,16 +263,16 @@ export default function Home() {
 
                 <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed max-w-xl">
                   പാലക്കാട്ടെ പ്രാദേശിക കർഷകരിൽ നിന്ന് ശേഖരിച്ച ശുദ്ധമായ മട്ടയരി, മരച്ചക്കിലാട്ടിയ വെളിച്ചെണ്ണ,
-                  വനതേൻ, നാടൻ പനങ്കരുപ്പട്ടി എന്നിവ എളുപ്പത്തിൽ ഓർഡർ ചെയ്യാം.
+                  വനതേൻ, പശുവിൻ നെയ്യ്, കൽപ്പാത്തി പലഹാരങ്ങൾ എന്നിവ എളുപ്പത്തിൽ ഓർഡർ ചെയ്യാം.
                 </p>
 
                 {/* Features Badges */}
                 <div className="pt-2 flex flex-wrap gap-3 text-xs text-emerald-100/90">
                   <span className="flex items-center gap-1">
-                    <Truck className="w-4 h-4 text-emerald-300" /> പാലക്കാട് ഫ്രീ ഡെലിവറി
+                    <Truck className="w-4 h-4 text-emerald-300" /> ₹{shopSettings.freeDeliveryThreshold} മുകളിൽ ഫ്രീ ഡെലിവറി
                   </span>
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="w-4 h-4 text-emerald-300" /> ഗുണനിലവാരം ഉറപ്പ്
+                    <QrCode className="w-4 h-4 text-emerald-300" /> UPI / GPay QR പേയ്‌മെന്റ്
                   </span>
                   <span className="flex items-center gap-1">
                     <HeartHandshake className="w-4 h-4 text-emerald-300" /> ക്യാഷ് ഓൺ ഡെലിവറി (COD)
@@ -276,7 +288,7 @@ export default function Home() {
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="ഉൽപ്പന്നങ്ങളുടെ പേര് തിരയുക (ഉദാ: മട്ടയരി, വെളിച്ചെണ്ണ)..."
+                  placeholder="ഉൽപ്പന്നങ്ങളുടെ പേര് തിരയുക (ഉദാ: മട്ടയരി, നെയ്യ്, എണ്ണ, തേൻ)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full h-11 pl-10 pr-4 rounded-xl border bg-card text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
@@ -370,25 +382,34 @@ export default function Home() {
         {activeTab === "admin" && (
           <div className="space-y-4">
             {/* Database Status Alert Banner */}
-            <div className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
-              isSupabaseConfigured
-                ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-                : "bg-blue-50 border-blue-200 text-blue-800"
-            }`}>
+            <div
+              className={`p-3 rounded-xl border flex flex-wrap items-center justify-between gap-2 text-xs ${
+                isSupabaseConfigured
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                  : "bg-blue-50 border-blue-200 text-blue-800"
+              }`}
+            >
               <div className="flex items-center gap-2">
                 <Database className="w-4 h-4" />
                 <span className="font-semibold">
-                  ബാക്കെൻഡ് സ്റ്റാറ്റസ്: {isSupabaseConfigured ? "⚡ Supabase Cloud Connected" : "💾 Local Storage Mode (Ready to connect Supabase)"}
+                  ബാക്കെൻഡ് സ്റ്റാറ്റസ്:{" "}
+                  {isSupabaseConfigured
+                    ? "⚡ Supabase Cloud Connected"
+                    : "💾 Local Storage Mode (Ready to connect Supabase)"}
                 </span>
               </div>
               <span className="text-[11px] opacity-80">
-                {isSupabaseConfigured ? "ക്ലൗഡ് ഡാറ്റാബേസിൽ തത്സമയം സേവ് ആകുന്നു" : ".env.local വഴി Supabase ആക്റ്റീവ് ആക്കാം"}
+                {isSupabaseConfigured
+                  ? "ക്ലൗഡ് ഡാറ്റാബേസിൽ തത്സമയം സേവ് ആകുന്നു"
+                  : ".env.local വഴി Supabase ആക്റ്റീവ് ആക്കാം"}
               </span>
             </div>
 
             <AdminDashboard
               products={products}
               orders={orders}
+              shopSettings={shopSettings}
+              onUpdateShopSettings={handleUpdateShopSettings}
               onAddProduct={handleAddProduct}
               onUpdateProduct={handleUpdateProduct}
               onDeleteProduct={handleDeleteProduct}
@@ -424,11 +445,12 @@ export default function Home() {
         <div className="container mx-auto px-4 max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Leaf className="w-4 h-4 text-emerald-600" />
-            <span className="font-semibold text-foreground">പാലക്കാട് എക്കോ ഷോപ്പ്</span>
+            <span className="font-semibold text-foreground">{shopSettings.shopName}</span>
             <span>• ഓർഗാനിക് & ഇക്കോ ഫ്രണ്ട്‌ലി സ്റ്റോർ, പാലക്കാട്</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
-            <span>📞 ഹെൽപ്‌ലൈൻ: 9447000000</span>
+            <span>📞 ഹെൽപ്‌ലൈൻ: {shopSettings.phone}</span>
+            <span>💳 UPI: {shopSettings.upiId}</span>
             <span>📍 പാലക്കാട്, കേരളം</span>
           </div>
         </div>
@@ -442,12 +464,13 @@ export default function Home() {
         onSave={handleSaveProfile}
       />
 
-      {/* Cart Drawer */}
+      {/* Cart Drawer with dynamic UPI */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         cart={cart}
         customer={customer}
+        shopSettings={shopSettings}
         onOpenProfile={() => {
           setIsCartOpen(false);
           setIsProfileOpen(true);

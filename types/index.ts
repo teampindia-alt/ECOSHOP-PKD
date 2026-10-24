@@ -44,6 +44,7 @@ export interface Order {
   deliveryCharge: number;
   total: number;
   paymentMethod: 'cod' | 'upi';
+  upiTransactionId?: string;
   status: OrderStatus;
   deliveryNotes?: string;
   createdAt: string;
@@ -57,4 +58,14 @@ export interface DeliveryZone {
   deliveryFee: number;
   minFreeDelivery: number;
   estimateTime: string;
+}
+
+export interface ShopSettings {
+  shopName: string;
+  upiId: string;
+  upiName: string;
+  phone: string;
+  whatsappNumber: string;
+  freeDeliveryThreshold: number;
+  announcement: string;
 }

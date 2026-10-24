@@ -1,21 +1,16 @@
-# Next.js template
+# പാലക്കാട് എക്കോ ഷോപ്പ് (Palakkad Eco Shop)
 
-This is a Next.js template with shadcn/ui.
+പാലക്കാട് നഗരത്തിനും സമീപ പ്രദേശങ്ങൾക്കും വേണ്ടിയുള്ള ഹൈപ്പർ-ലോക്കൽ ഇ-കൊമേഴ്‌സ് മൊബൈൽ & വെബ്ബ് ആപ്ലിക്കേഷൻ (PWA).
 
-## Adding components
+## പ്രധാന ഫീച്ചറുകൾ:
+- 🌿 **പാലക്കാടൻ നാടൻ ഉൽപ്പന്നങ്ങൾ:** മട്ടയരി, ചക്കിലാട്ടിയ വെളിച്ചെണ്ണ, വനതേൻ, പശുവിൻ നെയ്യ്, കൽപ്പാത്തി പലഹാരങ്ങൾ, രാമശ്ശേരി പൊടികൾ.
+- 📱 **മൊബൈൽ PWA ആപ്പ്:** ആപ്പ് സ്റ്റോറുകൾ ഇല്ലാതെ തന്നെ ഏത് ആൻഡ്രോയിഡ് / ഐഫോണിലും ഇൻസ്റ്റാൾ ചെയ്യാം.
+- 💳 **തത്സമയ UPI / GPay QR പേയ്‌മെന്റ്:** കടയുടെ സ്വന്തം UPI ഐഡി നൽകി ഉപഭോക്താക്കൾക്ക് QR സ്കാൻ ചെയ്ത് പണമടയ്ക്കാം.
+- 📍 **ഹൈപ്പർ ലോക്കൽ ഡെലിവറി:** പാലക്കാട് ടൗൺ, ഒലവക്കോട്, കൽപ്പാത്തി, പുതുശ്ശേരി, ചിറ്റൂർ റോഡ്, പറളി മേഖലകളിൽ കൃത്യമായ സമയത്ത് ഡെലിവറി.
+- ⚙️ **ഷോപ്പ് അഡ്മിൻ പാനൽ:** പുതിയ ഉൽപ്പന്നങ്ങൾ ചേർക്കാനും വിലയും സ്റ്റോക്കും മാറ്റാനും വരുന്ന ഓർഡറുകൾ മാനേജ് ചെയ്യാനും ഉള്ള സൗകര്യം.
+- ⚡ **Supabase Cloud Backend & LocalStorage Sync:** ക്ലൗഡ് ഡാറ്റാബേസ് പൂർണ്ണമായും പിന്തുണയ്ക്കുന്നു.
 
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+## സൗജന്യമായി Vercel-ൽ ഹോസ്റ്റ് ചെയ്യാൻ:
+1. https://vercel.com/new സന്ദർശിക്കുക
+2. നിങ്ങളുടെ GitHub അക്കൗണ്ട് ലിങ്ക് ചെയ്ത് `teampindia-alt/ECOSHOP-PKD` തിരഞ്ഞെടുക്കുക
+3. **Deploy** ക്ലിക്ക് ചെയ്യുക (വെറും 1 മിനിറ്റിൽ ആപ്പ് ഇന്റർനെറ്റിൽ തത്സമയം ലൈവ് ആകും!)

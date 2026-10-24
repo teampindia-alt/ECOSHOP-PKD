@@ -5,6 +5,7 @@ import { Leaf, ShoppingBag, User, Store, PackageCheck, MapPin } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CustomerProfile } from "@/types";
+import { InstallPwaPrompt } from "./InstallPwaPrompt";
 
 interface NavbarProps {
   activeTab: "shop" | "my-orders" | "admin";
@@ -14,6 +15,7 @@ interface NavbarProps {
   openCart: () => void;
   customer: CustomerProfile;
   openProfile: () => void;
+  announcement?: string;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -24,20 +26,25 @@ export const Navbar: React.FC<NavbarProps> = ({
   openCart,
   customer,
   openProfile,
+  announcement,
 }) => {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-xs">
+      {/* PWA Install Banner */}
+      <InstallPwaPrompt />
+
       {/* Top Palakkad delivery banner */}
       <div className="bg-emerald-800 text-emerald-50 px-4 py-1.5 text-xs text-center font-medium flex items-center justify-center gap-2">
         <MapPin className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
-        <span>
-          പാലക്കാട് ടൗൺ, ഒലവക്കോട്, കൽപ്പാത്തി, പുതുശ്ശേരി & സമീപ പ്രദേശങ്ങളിൽ ഹോം ഡെലിവറി ലഭ്യമാണ്!
+        <span className="truncate">
+          {announcement ||
+            "പാലക്കാട് ടൗൺ, ഒലവക്കോട്, കൽപ്പാത്തി, പുതുശ്ശേരി & സമീപ പ്രദേശങ്ങളിൽ ഹോം ഡെലിവറി ലഭ്യമാണ്!"}
         </span>
       </div>
 
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-2">
         {/* Brand Logo */}
-        <div 
+        <div
           onClick={() => setActiveTab("shop")}
           className="flex items-center gap-2.5 cursor-pointer select-none group"
         >
@@ -49,7 +56,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="font-bold text-base md:text-lg tracking-tight text-emerald-950 dark:text-emerald-50">
                 പാലക്കാട് എക്കോ ഷോപ്പ്
               </span>
-              <Badge variant="outline" className="hidden sm:inline-flex text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200">
+              <Badge
+                variant="outline"
+                className="hidden sm:inline-flex text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200"
+              >
                 Eco Shop
               </Badge>
             </div>

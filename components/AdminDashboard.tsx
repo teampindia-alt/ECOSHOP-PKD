@@ -15,16 +15,21 @@ import {
   IndianRupee,
   MapPin,
   TrendingUp,
+  Settings,
+  QrCode,
+  Save,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Product, Order, OrderStatus } from "@/types";
+import { Product, Order, OrderStatus, ShopSettings } from "@/types";
 import { PRODUCT_IMAGE_PRESETS } from "@/lib/sample-data";
 
 interface AdminDashboardProps {
   products: Product[];
   orders: Order[];
+  shopSettings: ShopSettings;
+  onUpdateShopSettings: (settings: ShopSettings) => void;
   onAddProduct: (product: Product) => void;
   onUpdateProduct: (product: Product) => void;
   onDeleteProduct: (productId: string) => void;
@@ -34,12 +39,20 @@ interface AdminDashboardProps {
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   products,
   orders,
+  shopSettings,
+  onUpdateShopSettings,
   onAddProduct,
   onUpdateProduct,
   onDeleteProduct,
   onUpdateOrderStatus,
 }) => {
-  const [activeAdminTab, setActiveAdminTab] = useState<"products" | "add-product" | "orders">("add-product");
+  const [activeAdminTab, setActiveAdminTab] = useState<
+    "products" | "add-product" | "orders" | "settings"
+  >("add-product");
+
+  // Shop Settings local state
+  const [settingsForm, setSettingsForm] = useState<ShopSettings>({ ...shopSettings });
+  const [settingsSaved, setSettingsSaved] = useState(false);
 
   // New Product Form State
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
@@ -95,6 +108,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       description: "",
       inStock: true,
     });
+  };
+
+  const handleSaveSettings = (e: React.FormEvent) => {
+    e.preventDefault();
+    onUpdateShopSettings(settingsForm);
+    setSettingsSaved(true);
+    setTimeout(() => setSettingsSaved(false), 2000);
   };
 
   const getStatusBadge = (status: OrderStatus) => {
@@ -164,7 +184,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </div>
 
       {/* Admin Sub Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b pb-3">
         <Button
           variant={activeAdminTab === "add-product" ? "default" : "outline"}
           size="sm"
@@ -174,7 +194,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           }`}
         >
           <PackagePlus className="w-4 h-4 mr-1.5" />
-          പുതിയ ഉൽപ്പന്നം ചേർക്കുക (Add Product)
+          പുതിയ ഉൽപ്പന്നം ചേർക്കുക
         </Button>
 
         <Button
@@ -200,6 +220,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           <ClipboardList className="w-4 h-4 mr-1.5" />
           ഓർഡറുകൾ ({orders.length})
         </Button>
+
+        <Button
+          variant={activeAdminTab === "settings" ? "default" : "outline"}
+          size="sm"
+          onClick={() => setActiveAdminTab("settings")}
+          className={`text-xs ${
+            activeAdminTab === "settings" ? "bg-emerald-700 hover:bg-emerald-800 text-white" : ""
+          }`}
+        >
+          <QrCode className="w-4 h-4 mr-1.5" />
+          UPI QR & ക്രമീകരണങ്ങൾ
+        </Button>
       </div>
 
       {/* TAB 1: ADD NEW PRODUCT */}
@@ -223,7 +255,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           )}
 
           <form onSubmit={handleCreateProduct} className="space-y-4 text-xs">
-            {/* Malayalam Name */}
             <div className="space-y-1.5">
               <label className="font-semibold text-foreground">ഉൽപ്പന്നത്തിന്റെ പേര് (മലയാളത്തിൽ) *</label>
               <Input
@@ -236,7 +267,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               />
             </div>
 
-            {/* English Name */}
             <div className="space-y-1.5">
               <label className="font-semibold text-foreground">പേര് (English - ഓപ്ഷണൽ)</label>
               <Input
@@ -248,7 +278,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               />
             </div>
 
-            {/* Category and Unit */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">കാറ്റഗറി (Category)</label>
@@ -258,10 +287,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   className="w-full h-10 px-3 rounded-lg border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600"
                 >
                   <option value="ജൈവ പച്ചക്കറികൾ">ജൈവ പച്ചക്കറികൾ (Vegetables)</option>
-                  <option value="പ്രകൃതിദത്ത എണ്ണകൾ">പ്രകൃതിദത്ത എണ്ണകൾ (Oils)</option>
-                  <option value="പരമ്പരാഗത പലഹാരങ്ങൾ">പരമ്പരാഗത പലഹാരങ്ങൾ (Jaggery / Honey)</option>
+                  <option value="പ്രകൃതിദത്ത എണ്ണകൾ">പ്രകൃതിദത്ത എണ്ണകൾ (Oils & Ghee)</option>
+                  <option value="പരമ്പരാഗത പലഹാരങ്ങൾ">പരമ്പരാഗത പലഹാരങ്ങൾ (Traditional)</option>
                   <option value="ധാന്യങ്ങൾ">ധാന്യങ്ങൾ (Rice & Millets)</option>
-                  <option value="മസാലകൾ">മസാലകൾ (Spices)</option>
+                  <option value="മസാലകൾ">മസാലകൾ (Spices & Podi)</option>
                   <option value="ഇക്കോ ക്ലീനിംഗ്">ഇക്കോ ക്ലീനിംഗ് (Eco Living)</option>
                   <option value="മറ്റുള്ളവ">മറ്റുള്ളവ (Others)</option>
                 </select>
@@ -280,7 +309,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
 
-            {/* Price and MRP */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">വിൽപന വില (Selling Price ₹) *</label>
@@ -312,11 +340,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </div>
             </div>
 
-            {/* Product Image Section */}
             <div className="space-y-2">
               <label className="font-semibold text-foreground flex items-center justify-between">
                 <span>ഉൽപ്പന്നത്തിന്റെ ചിത്രം (Image URL)</span>
-                <span className="text-[11px] text-muted-foreground">താഴെയുള്ള സാമ്പിൾ ചിത്രങ്ങളും തിരഞ്ഞെടുക്കാം</span>
+                <span className="text-[11px] text-muted-foreground">താഴെയുള്ള റെഡിമെയ്ഡ് ചിത്രങ്ങളും ക്ലിക്ക് ചെയ്യാം</span>
               </label>
               <Input
                 type="url"
@@ -326,7 +353,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 className="h-10 text-xs font-mono"
               />
 
-              {/* Quick Image Presets */}
               <div className="pt-1">
                 <span className="text-[11px] text-muted-foreground block mb-1">റെഡിമെയ്ഡ് ചിത്രങ്ങൾ:</span>
                 <div className="flex flex-wrap gap-2">
@@ -348,7 +374,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </div>
               </div>
 
-              {/* Image Preview */}
               {newProduct.image && (
                 <div className="mt-2 flex items-center gap-3 p-2 border rounded-xl bg-muted/20">
                   <img
@@ -364,7 +389,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               )}
             </div>
 
-            {/* Description */}
             <div className="space-y-1.5">
               <label className="font-semibold text-foreground">ഉൽപ്പന്ന വിവരണം (Description)</label>
               <textarea
@@ -376,7 +400,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               />
             </div>
 
-            {/* In Stock toggle */}
             <div className="flex items-center gap-2 pt-1">
               <input
                 type="checkbox"
@@ -390,7 +413,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </label>
             </div>
 
-            {/* Submit button */}
             <div className="pt-3">
               <Button
                 type="submit"
@@ -461,7 +483,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 </div>
 
-                {/* Quick Actions */}
                 <div className="flex items-center gap-2 self-end sm:self-center">
                   <Button
                     variant="outline"
@@ -523,7 +544,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   key={order.id}
                   className="p-4 rounded-xl border bg-background space-y-3 hover:border-emerald-500/50 transition-colors"
                 >
-                  {/* Order Top Header */}
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b pb-2.5">
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-bold text-xs bg-muted px-2 py-1 rounded">
@@ -545,7 +565,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   </div>
 
-                  {/* Customer Info Box with Quick Call / WhatsApp */}
+                  {order.upiTransactionId && (
+                    <div className="bg-emerald-50 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200 px-3 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-2">
+                      <QrCode className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>UPI Ref: {order.upiTransactionId}</span>
+                    </div>
+                  )}
+
                   <div className="bg-muted/40 p-3 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                     <div>
                       <p className="font-bold text-foreground">
@@ -561,7 +587,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </p>
                     </div>
 
-                    {/* Quick Call / WhatsApp */}
                     <div className="flex items-center gap-2 shrink-0">
                       <a
                         href={`tel:${order.customer.phone}`}
@@ -582,7 +607,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </div>
                   </div>
 
-                  {/* Ordered Items List */}
                   <div className="text-xs space-y-1">
                     <span className="font-semibold text-muted-foreground">ഓർഡർ ചെയ്ത സാധനങ്ങൾ:</span>
                     <ul className="list-disc list-inside space-y-0.5 text-foreground pl-1">
@@ -594,7 +618,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </ul>
                   </div>
 
-                  {/* Status Updater Buttons */}
                   <div className="pt-2 border-t flex flex-wrap items-center justify-between gap-2">
                     <span className="text-[11px] font-medium text-muted-foreground">
                       സ്റ്റാറ്റസ് മാറ്റുക:
@@ -638,6 +661,108 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB 4: SHOP UPI & GENERAL SETTINGS */}
+      {activeAdminTab === "settings" && (
+        <div className="bg-card rounded-2xl border p-6 shadow-sm max-w-xl space-y-4">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold flex items-center gap-2 text-foreground">
+              <QrCode className="w-5 h-5 text-emerald-700" />
+              ഷോപ്പ് UPI & ക്രമീകരണങ്ങൾ (Shop Settings)
+            </h2>
+            <p className="text-xs text-muted-foreground mt-1">
+              നിങ്ങളുടെ ഷോപ്പിലെ യഥാർത്ഥ UPI / GPay ID ഇവിടെ നൽകിയാൽ കസ്റ്റമർമാർക്ക് നേരിട്ട് സ്കാൻ ചെയ്തു പണമടയ്ക്കാം.
+            </p>
+          </div>
+
+          {settingsSaved && (
+            <div className="p-3 bg-emerald-50 text-emerald-800 rounded-xl border border-emerald-200 text-xs font-semibold flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4" />
+              ഷോപ്പ് വിവരങ്ങളും UPI ID-യും വിജയകരമായി സേവ് ചെയ്തു!
+            </div>
+          )}
+
+          <form onSubmit={handleSaveSettings} className="space-y-4 text-xs">
+            <div className="space-y-1.5">
+              <label className="font-semibold text-foreground">
+                നിങ്ങളുടെ യഥാർത്ഥ UPI ID (GPay / PhonePe / Paytm / BHIM) *
+              </label>
+              <Input
+                type="text"
+                placeholder="ഉദാ: 9447012345@oksbi അല്ലെങ്കിൽ ecoshop@upi"
+                value={settingsForm.upiId}
+                onChange={(e) => setSettingsForm({ ...settingsForm, upiId: e.target.value })}
+                required
+                className="h-10 text-sm font-mono"
+              />
+              <span className="text-[11px] text-muted-foreground">
+                കസ്റ്റമർമാർ ഓർഡർ ചെയ്യുമ്പോൾ കാണിക്കുന്ന ക്യുആർ കോഡ് ഈ UPI ID അടിസ്ഥാനമാക്കിയായിരിക്കും.
+              </span>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-semibold text-foreground">ഷോപ്പ് / ബാങ്ക് അക്കൗണ്ട് പേര്</label>
+              <Input
+                type="text"
+                placeholder="Palakkad Eco Shop"
+                value={settingsForm.upiName}
+                onChange={(e) => setSettingsForm({ ...settingsForm, upiName: e.target.value })}
+                className="h-10 text-sm"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="font-semibold text-foreground">ഷോപ്പ് ഹെൽപ്‌ലൈൻ നമ്പർ</label>
+                <Input
+                  type="tel"
+                  placeholder="9447012345"
+                  value={settingsForm.phone}
+                  onChange={(e) => setSettingsForm({ ...settingsForm, phone: e.target.value })}
+                  className="h-10 text-sm"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="font-semibold text-foreground">സൗജന്യ ഡെലിവറി പരിധി (₹)</label>
+                <Input
+                  type="number"
+                  placeholder="350"
+                  value={settingsForm.freeDeliveryThreshold}
+                  onChange={(e) =>
+                    setSettingsForm({
+                      ...settingsForm,
+                      freeDeliveryThreshold: Number(e.target.value),
+                    })
+                  }
+                  className="h-10 text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-semibold text-foreground">ടോപ്പ് അനൗൺസ്‌മെന്റ് മെസ്സേജ്</label>
+              <Input
+                type="text"
+                placeholder="പാലക്കാട് ടൗൺ, ഒലവക്കോട്, കൽപ്പാത്തി, പുതുശ്ശേരി & സമീപ പ്രദേശങ്ങളിൽ ഹോം ഡെലിവറി ലഭ്യമാണ്!"
+                value={settingsForm.announcement}
+                onChange={(e) => setSettingsForm({ ...settingsForm, announcement: e.target.value })}
+                className="h-10 text-xs"
+              />
+            </div>
+
+            <div className="pt-2">
+              <Button
+                type="submit"
+                className="w-full h-11 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-sm shadow-md"
+              >
+                <Save className="w-4 h-4 mr-1.5" />
+                ക്രമീകരണങ്ങൾ സേവ് ചെയ്യുക (Save Settings)
+              </Button>
+            </div>
+          </form>
         </div>
       )}
     </div>
