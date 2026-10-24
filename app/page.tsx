@@ -10,6 +10,7 @@ import {
   Truck,
   HeartHandshake,
   CheckCircle,
+  Database,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
@@ -20,6 +21,16 @@ import { AdminDashboard } from "@/components/AdminDashboard";
 import { OrdersView } from "@/components/OrdersView";
 import { Product, CustomerProfile, CartItem, Order, OrderStatus } from "@/types";
 import { INITIAL_PRODUCTS, PALAKKAD_DELIVERY_ZONES } from "@/lib/sample-data";
+import {
+  isSupabaseConfigured,
+  getProducts,
+  addProductToDb,
+  updateProductInDb,
+  deleteProductFromDb,
+  getOrders,
+  createOrderInDb,
+  updateOrderStatusInDb,
+} from "@/lib/supabase";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"shop" | "my-orders" | "admin">("shop");
@@ -45,42 +56,74 @@ export default function Home() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
 
-  // Load from localStorage on mount
+  // Load Initial Data (from Supabase if configured, or localStorage fallback)
   useEffect(() => {
-    try {
-      const savedProducts = localStorage.getItem("palakkad_eco_products");
-      if (savedProducts) setProducts(JSON.parse(savedProducts));
+    async function loadData() {
+      if (isSupabaseConfigured) {
+        try {
+          const dbProducts = await getProducts();
+          if (dbProducts && dbProducts.length > 0) setProducts(dbProducts);
 
-      const savedOrders = localStorage.getItem("palakkad_eco_orders");
-      if (savedOrders) setOrders(JSON.parse(savedOrders));
+          const dbOrders = await getOrders();
+          if (dbOrders) setOrders(dbOrders);
+        } catch (e) {
+          console.error("Failed to load from Supabase:", e);
+        }
+      } else {
+        try {
+          const savedProducts = localStorage.getItem("palakkad_eco_products");
+          if (savedProducts) setProducts(JSON.parse(savedProducts));
 
-      const savedCustomer = localStorage.getItem("palakkad_eco_customer");
-      if (savedCustomer) setCustomer(JSON.parse(savedCustomer));
+          const savedOrders = localStorage.getItem("palakkad_eco_orders");
+          if (savedOrders) setOrders(JSON.parse(savedOrders));
+        } catch (e) {
+          console.error("Failed to load local storage", e);
+        }
+      }
 
-      const savedCart = localStorage.getItem("palakkad_eco_cart");
-      if (savedCart) setCart(JSON.parse(savedCart));
-    } catch (e) {
-      console.error("Failed to load local storage", e);
+      try {
+        const savedCustomer = localStorage.getItem("palakkad_eco_customer");
+        if (savedCustomer) setCustomer(JSON.parse(savedCustomer));
+
+        const savedCart = localStorage.getItem("palakkad_eco_cart");
+        if (savedCart) setCart(JSON.parse(savedCart));
+      } catch (e) {
+        console.error("Failed to load customer/cart", e);
+      }
     }
+
+    loadData();
   }, []);
 
-  // Sync products to localStorage
-  const handleAddProduct = (newProd: Product) => {
+  // Sync products to Supabase & localStorage
+  const handleAddProduct = async (newProd: Product) => {
     const updated = [newProd, ...products];
     setProducts(updated);
     localStorage.setItem("palakkad_eco_products", JSON.stringify(updated));
+
+    if (isSupabaseConfigured) {
+      await addProductToDb(newProd);
+    }
   };
 
-  const handleUpdateProduct = (updatedProd: Product) => {
+  const handleUpdateProduct = async (updatedProd: Product) => {
     const updated = products.map((p) => (p.id === updatedProd.id ? updatedProd : p));
     setProducts(updated);
     localStorage.setItem("palakkad_eco_products", JSON.stringify(updated));
+
+    if (isSupabaseConfigured) {
+      await updateProductInDb(updatedProd);
+    }
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string) => {
     const updated = products.filter((p) => p.id !== productId);
     setProducts(updated);
     localStorage.setItem("palakkad_eco_products", JSON.stringify(updated));
+
+    if (isSupabaseConfigured) {
+      await deleteProductFromDb(productId);
+    }
   };
 
   // Sync Cart
@@ -127,19 +170,27 @@ export default function Home() {
   };
 
   // Order Placement
-  const handleOrderPlaced = (newOrder: Order) => {
+  const handleOrderPlaced = async (newOrder: Order) => {
     const updatedOrders = [newOrder, ...orders];
     setOrders(updatedOrders);
     localStorage.setItem("palakkad_eco_orders", JSON.stringify(updatedOrders));
     handleClearCart();
     setLastOrder(newOrder);
+
+    if (isSupabaseConfigured) {
+      await createOrderInDb(newOrder);
+    }
   };
 
   // Order Status update by Admin
-  const handleUpdateOrderStatus = (orderId: string, status: OrderStatus) => {
+  const handleUpdateOrderStatus = async (orderId: string, status: OrderStatus) => {
     const updated = orders.map((o) => (o.id === orderId ? { ...o, status } : o));
     setOrders(updated);
     localStorage.setItem("palakkad_eco_orders", JSON.stringify(updated));
+
+    if (isSupabaseConfigured) {
+      await updateOrderStatusInDb(orderId, status);
+    }
   };
 
   // Filter Categories
@@ -317,14 +368,33 @@ export default function Home() {
 
         {/* ADMIN DASHBOARD */}
         {activeTab === "admin" && (
-          <AdminDashboard
-            products={products}
-            orders={orders}
-            onAddProduct={handleAddProduct}
-            onUpdateProduct={handleUpdateProduct}
-            onDeleteProduct={handleDeleteProduct}
-            onUpdateOrderStatus={handleUpdateOrderStatus}
-          />
+          <div className="space-y-4">
+            {/* Database Status Alert Banner */}
+            <div className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+              isSupabaseConfigured
+                ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                : "bg-blue-50 border-blue-200 text-blue-800"
+            }`}>
+              <div className="flex items-center gap-2">
+                <Database className="w-4 h-4" />
+                <span className="font-semibold">
+                  ബാക്കെൻഡ് സ്റ്റാറ്റസ്: {isSupabaseConfigured ? "⚡ Supabase Cloud Connected" : "💾 Local Storage Mode (Ready to connect Supabase)"}
+                </span>
+              </div>
+              <span className="text-[11px] opacity-80">
+                {isSupabaseConfigured ? "ക്ലൗഡ് ഡാറ്റാബേസിൽ തത്സമയം സേവ് ആകുന്നു" : ".env.local വഴി Supabase ആക്റ്റീവ് ആക്കാം"}
+              </span>
+            </div>
+
+            <AdminDashboard
+              products={products}
+              orders={orders}
+              onAddProduct={handleAddProduct}
+              onUpdateProduct={handleUpdateProduct}
+              onDeleteProduct={handleDeleteProduct}
+              onUpdateOrderStatus={handleUpdateOrderStatus}
+            />
+          </div>
         )}
       </main>
 
