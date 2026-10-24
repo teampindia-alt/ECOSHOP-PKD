@@ -1,0 +1,60 @@
+export interface Product {
+  id: string;
+  nameMl: string;
+  nameEn: string;
+  category: string;
+  price: number;
+  originalPrice?: number;
+  unit: string;
+  image: string;
+  description: string;
+  inStock: boolean;
+  featured?: boolean;
+}
+
+export interface CustomerProfile {
+  name: string;
+  phone: string;
+  address: string;
+  landmark: string;
+  zone: string;
+  pincode: string;
+  isRegistered: boolean;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export type OrderStatus = 'received' | 'packed' | 'out_for_delivery' | 'delivered' | 'cancelled';
+
+export interface Order {
+  id: string;
+  customer: CustomerProfile;
+  items: {
+    productId: string;
+    nameMl: string;
+    nameEn: string;
+    unitPrice: number;
+    quantity: number;
+    unit: string;
+  }[];
+  subtotal: number;
+  deliveryCharge: number;
+  total: number;
+  paymentMethod: 'cod' | 'upi';
+  status: OrderStatus;
+  deliveryNotes?: string;
+  createdAt: string;
+}
+
+export interface DeliveryZone {
+  id: string;
+  nameMl: string;
+  nameEn: string;
+  pincode: string;
+  deliveryFee: number;
+  minFreeDelivery: number;
+  estimateTime: string;
+}
