@@ -20,6 +20,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { CartDrawer } from "@/components/CartDrawer";
 import { CustomerProfileModal } from "@/components/CustomerProfileModal";
 import { AuthModal } from "@/components/AuthModal";
+import { AdminLoginGate } from "@/components/AdminLoginGate";
 import { OrderReceiptModal } from "@/components/OrderReceiptModal";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import { OrdersView } from "@/components/OrdersView";
@@ -50,6 +51,9 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [shopSettings, setShopSettings] = useState<ShopSettings>(DEFAULT_SHOP_SETTINGS);
 
+  // Admin Auth Gate State
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
   // Customer Profile State
   const [customer, setCustomer] = useState<CustomerProfile>({
     name: "",
@@ -68,6 +72,29 @@ export default function Home() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
+
+  // Check admin session
+  useEffect(() => {
+    try {
+      const adminSession = sessionStorage.getItem("palakkad_admin_logged_in");
+      if (adminSession === "true") setIsAdminLoggedIn(true);
+    } catch (e) {}
+  }, []);
+
+  const handleAdminLoginSuccess = () => {
+    setIsAdminLoggedIn(true);
+    try {
+      sessionStorage.setItem("palakkad_admin_logged_in", "true");
+    } catch (e) {}
+  };
+
+  const handleAdminLock = () => {
+    setIsAdminLoggedIn(false);
+    try {
+      sessionStorage.removeItem("palakkad_admin_logged_in");
+    } catch (e) {}
+    setActiveTab("shop");
+  };
 
   // Listen to Firebase Auth state on mount
   useEffect(() => {
@@ -163,7 +190,6 @@ export default function Home() {
       return updated;
     });
 
-    // If address is missing, prompt to fill delivery address
     if (!customer.address) {
       setTimeout(() => setIsProfileOpen(true), 400);
     }
@@ -490,58 +516,69 @@ export default function Home() {
           />
         )}
 
-        {/* ADMIN DASHBOARD */}
+        {/* ADMIN DASHBOARD - WITH SECURE PASSWORD GATE */}
         {activeTab === "admin" && (
           <div className="space-y-4">
-            {/* Backend & Auth Status Alert Banner */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div
-                className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
-                  isFirebaseConfigured
-                    ? "bg-amber-50 border-amber-200 text-amber-900"
-                    : "bg-blue-50 border-blue-200 text-blue-900"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-amber-600" />
-                  <span className="font-semibold">
-                    Firebase Auth: {isFirebaseConfigured ? "🔥 Connected" : "⚡ Ready (Demo Mode)"}
-                  </span>
-                </div>
-                <span className="text-[11px] opacity-80">
-                  {isFirebaseConfigured ? "തത്സമയ ലോഗിൻ സജീവം" : ".env.local-ൽ കീകൾ നൽകാം"}
-                </span>
-              </div>
+            {!isAdminLoggedIn ? (
+              <AdminLoginGate
+                currentPassword={shopSettings.adminPassword || "palakkad@eco"}
+                onSuccess={handleAdminLoginSuccess}
+                onCancel={() => setActiveTab("shop")}
+              />
+            ) : (
+              <>
+                {/* Backend & Auth Status Alert Banner */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div
+                    className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+                      isFirebaseConfigured
+                        ? "bg-amber-50 border-amber-200 text-amber-900"
+                        : "bg-blue-50 border-blue-200 text-blue-900"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Flame className="w-4 h-4 text-amber-600" />
+                      <span className="font-semibold">
+                        Firebase Auth: {isFirebaseConfigured ? "🔥 Connected" : "⚡ Ready (Demo Mode)"}
+                      </span>
+                    </div>
+                    <span className="text-[11px] opacity-80">
+                      {isFirebaseConfigured ? "തത്സമയ ലോഗിൻ സജീവം" : ".env.local-ൽ കീകൾ നൽകാം"}
+                    </span>
+                  </div>
 
-              <div
-                className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
-                  isSupabaseConfigured
-                    ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-                    : "bg-muted border-border text-foreground"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Database className="w-4 h-4 text-emerald-600" />
-                  <span className="font-semibold">
-                    ഡാറ്റാബേസ്: {isSupabaseConfigured ? "⚡ Supabase Cloud" : "💾 Local Storage"}
-                  </span>
+                  <div
+                    className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+                      isSupabaseConfigured
+                        ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                        : "bg-muted border-border text-foreground"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Database className="w-4 h-4 text-emerald-600" />
+                      <span className="font-semibold">
+                        ഡാറ്റാബേസ്: {isSupabaseConfigured ? "⚡ Supabase Cloud" : "💾 Local Storage"}
+                      </span>
+                    </div>
+                    <span className="text-[11px] opacity-80">
+                      {isSupabaseConfigured ? "ക്ലൗഡ് സിങ്ക് സജീവം" : "റെഡി"}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[11px] opacity-80">
-                  {isSupabaseConfigured ? "ക്ലൗഡ് സിങ്ക് സജീവം" : "റെഡി"}
-                </span>
-              </div>
-            </div>
 
-            <AdminDashboard
-              products={products}
-              orders={orders}
-              shopSettings={shopSettings}
-              onUpdateShopSettings={handleUpdateShopSettings}
-              onAddProduct={handleAddProduct}
-              onUpdateProduct={handleUpdateProduct}
-              onDeleteProduct={handleDeleteProduct}
-              onUpdateOrderStatus={handleUpdateOrderStatus}
-            />
+                <AdminDashboard
+                  products={products}
+                  orders={orders}
+                  shopSettings={shopSettings}
+                  onUpdateShopSettings={handleUpdateShopSettings}
+                  onAddProduct={handleAddProduct}
+                  onUpdateProduct={handleUpdateProduct}
+                  onDeleteProduct={handleDeleteProduct}
+                  onUpdateOrderStatus={handleUpdateOrderStatus}
+                  onLockAdmin={handleAdminLock}
+                />
+              </>
+            )}
           </div>
         )}
       </main>

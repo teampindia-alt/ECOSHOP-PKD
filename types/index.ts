@@ -72,4 +72,5 @@ export interface ShopSettings {
   whatsappNumber: string;
   freeDeliveryThreshold: number;
   announcement: string;
+  adminPassword?: string;
 }

@@ -8,6 +8,7 @@ export const DEFAULT_SHOP_SETTINGS: ShopSettings = {
   whatsappNumber: "919447012345",
   freeDeliveryThreshold: 350,
   announcement: "പാലക്കാട് ടൗൺ, ഒലവക്കോട്, കൽപ്പാത്തി, പുതുശ്ശേരി & സമീപ പ്രദേശങ്ങളിൽ 3 മണിക്കൂറിനുള്ളിൽ ഡെലിവറി!",
+  adminPassword: "palakkad@eco",
 };
 
 export const PALAKKAD_DELIVERY_ZONES: DeliveryZone[] = [

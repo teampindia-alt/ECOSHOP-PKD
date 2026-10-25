@@ -18,6 +18,9 @@ import {
   Settings,
   QrCode,
   Save,
+  Lock,
+  KeyRound,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +37,7 @@ interface AdminDashboardProps {
   onUpdateProduct: (product: Product) => void;
   onDeleteProduct: (productId: string) => void;
   onUpdateOrderStatus: (orderId: string, status: OrderStatus) => void;
+  onLockAdmin: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -45,13 +49,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onUpdateProduct,
   onDeleteProduct,
   onUpdateOrderStatus,
+  onLockAdmin,
 }) => {
   const [activeAdminTab, setActiveAdminTab] = useState<
     "products" | "add-product" | "orders" | "settings"
   >("add-product");
 
   // Shop Settings local state
-  const [settingsForm, setSettingsForm] = useState<ShopSettings>({ ...shopSettings });
+  const [settingsForm, setSettingsForm] = useState<ShopSettings>({
+    ...shopSettings,
+    adminPassword: shopSettings.adminPassword || "palakkad@eco",
+  });
   const [settingsSaved, setSettingsSaved] = useState(false);
 
   // New Product Form State
@@ -138,6 +146,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Top Header with Lock Button */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-muted/40 p-3.5 rounded-2xl border">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-bold">
+            <Lock className="w-4 h-4" />
+          </div>
+          <div>
+            <h3 className="font-bold text-sm text-foreground">അഡ്മിൻ പാനൽ (Admin Mode Active)</h3>
+            <p className="text-[11px] text-muted-foreground">സുരക്ഷിത പാസ്‌വേഡ് ഉപയോഗിച്ച് ലോഗിൻ ചെയ്തിരിക്കുന്നു</p>
+          </div>
+        </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onLockAdmin}
+          className="text-xs h-8 text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30"
+        >
+          <LogOut className="w-3.5 h-3.5 mr-1" />
+          അഡ്മിൻ ലോക്ക് ചെയ്യുക (Lock Admin)
+        </Button>
+      </div>
+
       {/* Admin Top Stats Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="bg-card p-4 rounded-2xl border shadow-xs flex items-center gap-3">
@@ -230,7 +261,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           }`}
         >
           <QrCode className="w-4 h-4 mr-1.5" />
-          UPI QR & ക്രമീകരണങ്ങൾ
+          UPI & പാസ്‌വേഡ് ക്രമീകരണങ്ങൾ
         </Button>
       </div>
 
@@ -664,27 +695,47 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* TAB 4: SHOP UPI & GENERAL SETTINGS */}
+      {/* TAB 4: SHOP UPI & GENERAL SETTINGS (INCLUDING ADMIN PASSWORD) */}
       {activeAdminTab === "settings" && (
         <div className="bg-card rounded-2xl border p-6 shadow-sm max-w-xl space-y-4">
           <div className="mb-4">
             <h2 className="text-lg font-bold flex items-center gap-2 text-foreground">
               <QrCode className="w-5 h-5 text-emerald-700" />
-              ഷോപ്പ് UPI & ക്രമീകരണങ്ങൾ (Shop Settings)
+              UPI & അഡ്മിൻ പാസ്‌വേഡ് ക്രമീകരണങ്ങൾ
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              നിങ്ങളുടെ ഷോപ്പിലെ യഥാർത്ഥ UPI / GPay ID ഇവിടെ നൽകിയാൽ കസ്റ്റമർമാർക്ക് നേരിട്ട് സ്കാൻ ചെയ്തു പണമടയ്ക്കാം.
+              നിങ്ങളുടെ ഷോപ്പിലെ യഥാർത്ഥ UPI ID-യും അഡ്മിൻ രഹസ്യ പാസ്‌വേഡും ഇവിടെ നൽകി മാറ്റാം.
             </p>
           </div>
 
           {settingsSaved && (
             <div className="p-3 bg-emerald-50 text-emerald-800 rounded-xl border border-emerald-200 text-xs font-semibold flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4" />
-              ഷോപ്പ് വിവരങ്ങളും UPI ID-യും വിജയകരമായി സേവ് ചെയ്തു!
+              വിവരങ്ങളും അഡ്മിൻ പാസ്‌വേഡും വിജയകരമായി സേവ് ചെയ്തു!
             </div>
           )}
 
           <form onSubmit={handleSaveSettings} className="space-y-4 text-xs">
+            {/* ADMIN PASSWORD SECTION */}
+            <div className="p-3.5 rounded-xl border bg-emerald-50/60 dark:bg-emerald-950/40 border-emerald-200 space-y-2">
+              <label className="font-bold text-emerald-900 dark:text-emerald-100 flex items-center gap-1.5 text-xs">
+                <KeyRound className="w-4 h-4 text-emerald-700" />
+                നിങ്ങളുടെ അഡ്മിൻ പാസ്‌വേഡ് (Admin Secret Password) *
+              </label>
+              <Input
+                type="text"
+                value={settingsForm.adminPassword}
+                onChange={(e) =>
+                  setSettingsForm({ ...settingsForm, adminPassword: e.target.value })
+                }
+                required
+                className="h-10 text-sm font-mono bg-background"
+              />
+              <span className="text-[11px] text-muted-foreground block">
+                ഈ പാസ്‌വേഡ് അടിച്ചാൽ മാത്രമേ ആർക്കും അഡ്മിൻ പാനലിൽ കയറാൻ സാധിക്കൂ. നിങ്ങൾക്ക് ഇഷ്ടമുള്ള പാസ്‌വേഡ് ഇവിടെ നൽകാം.
+              </span>
+            </div>
+
             <div className="space-y-1.5">
               <label className="font-semibold text-foreground">
                 നിങ്ങളുടെ യഥാർത്ഥ UPI ID (GPay / PhonePe / Paytm / BHIM) *
@@ -697,9 +748,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 required
                 className="h-10 text-sm font-mono"
               />
-              <span className="text-[11px] text-muted-foreground">
-                കസ്റ്റമർമാർ ഓർഡർ ചെയ്യുമ്പോൾ കാണിക്കുന്ന ക്യുആർ കോഡ് ഈ UPI ID അടിസ്ഥാനമാക്കിയായിരിക്കും.
-              </span>
             </div>
 
             <div className="space-y-1.5">
@@ -759,7 +807,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 className="w-full h-11 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-sm shadow-md"
               >
                 <Save className="w-4 h-4 mr-1.5" />
-                ക്രമീകരണങ്ങൾ സേവ് ചെയ്യുക (Save Settings)
+                പാസ്‌വേഡും ക്രമീകരണങ്ങളും സേവ് ചെയ്യുക
               </Button>
             </div>
           </form>
