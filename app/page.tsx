@@ -12,11 +12,14 @@ import {
   CheckCircle,
   Database,
   QrCode,
+  Flame,
+  UserCheck,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
 import { CartDrawer } from "@/components/CartDrawer";
 import { CustomerProfileModal } from "@/components/CustomerProfileModal";
+import { AuthModal } from "@/components/AuthModal";
 import { OrderReceiptModal } from "@/components/OrderReceiptModal";
 import { AdminDashboard } from "@/components/AdminDashboard";
 import { OrdersView } from "@/components/OrdersView";
@@ -32,6 +35,11 @@ import {
   createOrderInDb,
   updateOrderStatusInDb,
 } from "@/lib/supabase";
+import {
+  isFirebaseConfigured,
+  onAuthStateChange,
+  logoutUser,
+} from "@/lib/firebase";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"shop" | "my-orders" | "admin">("shop");
@@ -45,20 +53,51 @@ export default function Home() {
   // Customer Profile State
   const [customer, setCustomer] = useState<CustomerProfile>({
     name: "",
+    email: "",
     phone: "",
     address: "",
     landmark: "",
     zone: "pkd-town",
     pincode: "678001",
     isRegistered: false,
+    authProvider: "local",
   });
 
   // Modals state
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [lastOrder, setLastOrder] = useState<Order | null>(null);
 
-  // Load Initial Data
+  // Listen to Firebase Auth state on mount
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange((firebaseUser) => {
+      if (firebaseUser) {
+        setCustomer((prev) => {
+          const updated: CustomerProfile = {
+            ...prev,
+            uid: firebaseUser.uid,
+            name: firebaseUser.displayName || prev.name || "ഉപഭോക്താവ്",
+            email: firebaseUser.email || prev.email || "",
+            phone: firebaseUser.phoneNumber || prev.phone || "",
+            photoURL: firebaseUser.photoURL || prev.photoURL || "",
+            isRegistered: true,
+            authProvider: firebaseUser.providerData[0]?.providerId.includes("google")
+              ? "google"
+              : "firebase",
+          };
+          localStorage.setItem("palakkad_eco_customer", JSON.stringify(updated));
+          return updated;
+        });
+      }
+    });
+
+    return () => {
+      if (typeof unsubscribe === "function") unsubscribe();
+    };
+  }, []);
+
+  // Load Initial Data from storage & Supabase
   useEffect(() => {
     async function loadData() {
       if (isSupabaseConfigured) {
@@ -99,6 +138,53 @@ export default function Home() {
 
     loadData();
   }, []);
+
+  // Handle successful login/registration from AuthModal
+  const handleAuthSuccess = (userData: {
+    uid: string;
+    name: string;
+    email: string;
+    phone: string;
+    authProvider: "firebase" | "google" | "local";
+    photoURL?: string;
+  }) => {
+    setCustomer((prev) => {
+      const updated: CustomerProfile = {
+        ...prev,
+        uid: userData.uid,
+        name: userData.name,
+        email: userData.email,
+        phone: userData.phone || prev.phone,
+        photoURL: userData.photoURL,
+        isRegistered: true,
+        authProvider: userData.authProvider,
+      };
+      localStorage.setItem("palakkad_eco_customer", JSON.stringify(updated));
+      return updated;
+    });
+
+    // If address is missing, prompt to fill delivery address
+    if (!customer.address) {
+      setTimeout(() => setIsProfileOpen(true), 400);
+    }
+  };
+
+  const handleLogout = async () => {
+    await logoutUser();
+    const guestCustomer: CustomerProfile = {
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      landmark: "",
+      zone: "pkd-town",
+      pincode: "678001",
+      isRegistered: false,
+      authProvider: "local",
+    };
+    setCustomer(guestCustomer);
+    localStorage.removeItem("palakkad_eco_customer");
+  };
 
   // Update Shop Settings
   const handleUpdateShopSettings = (newSettings: ShopSettings) => {
@@ -230,7 +316,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col antialiased text-foreground selection:bg-emerald-100 selection:text-emerald-900">
-      {/* Navigation with PWA prompt & Announcement */}
+      {/* Navigation with PWA prompt, Auth, and Announcement */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -239,6 +325,8 @@ export default function Home() {
         openCart={() => setIsCartOpen(true)}
         customer={customer}
         openProfile={() => setIsProfileOpen(true)}
+        openAuth={() => setIsAuthOpen(true)}
+        onLogout={handleLogout}
         announcement={shopSettings.announcement}
       />
 
@@ -280,6 +368,39 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* User welcome or registration prompt strip */}
+            {!customer.isRegistered ? (
+              <div className="p-3 rounded-2xl border bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-amber-500" />
+                  <span>
+                    <strong>Firebase ലോഗിൻ:</strong> വേഗത്തിൽ ഓർഡർ ചെയ്യാനും വിലാസം സേവ് ചെയ്യാനും ലോഗിൻ ചെയ്യുക.
+                  </span>
+                </div>
+                <button
+                  onClick={() => setIsAuthOpen(true)}
+                  className="font-bold text-emerald-800 dark:text-emerald-300 hover:underline"
+                >
+                  ലോഗിൻ / രജിസ്റ്റർ ചെയ്യുക &rarr;
+                </button>
+              </div>
+            ) : (
+              <div className="p-3 rounded-2xl border bg-muted/40 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <UserCheck className="w-4 h-4 text-emerald-600" />
+                  <span>
+                    സ്വാഗതം, <strong>{customer.name}</strong>! പാലക്കാട് ഡെലിവറി ലഭ്യമാണ്.
+                  </span>
+                </div>
+                <button
+                  onClick={() => setIsProfileOpen(true)}
+                  className="text-emerald-700 font-semibold hover:underline"
+                >
+                  📍 {customer.address ? "വിലാസം മാറ്റുക" : "+ ഡെലിവറി വിലാസം നൽകുക"}
+                </button>
+              </div>
+            )}
 
             {/* Search & Category Filter Section */}
             <div className="space-y-3">
@@ -330,15 +451,6 @@ export default function Home() {
                     ({filteredProducts.length} എണ്ണം)
                   </span>
                 </h2>
-
-                {!customer.isRegistered && (
-                  <button
-                    onClick={() => setIsProfileOpen(true)}
-                    className="text-xs text-emerald-700 font-semibold hover:underline"
-                  >
-                    📍 ഡെലിവറി ലൊക്കേഷൻ സെറ്റ് ചെയ്യുക
-                  </button>
-                )}
               </div>
 
               {filteredProducts.length === 0 ? (
@@ -381,28 +493,43 @@ export default function Home() {
         {/* ADMIN DASHBOARD */}
         {activeTab === "admin" && (
           <div className="space-y-4">
-            {/* Database Status Alert Banner */}
-            <div
-              className={`p-3 rounded-xl border flex flex-wrap items-center justify-between gap-2 text-xs ${
-                isSupabaseConfigured
-                  ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-                  : "bg-blue-50 border-blue-200 text-blue-800"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Database className="w-4 h-4" />
-                <span className="font-semibold">
-                  ബാക്കെൻഡ് സ്റ്റാറ്റസ്:{" "}
-                  {isSupabaseConfigured
-                    ? "⚡ Supabase Cloud Connected"
-                    : "💾 Local Storage Mode (Ready to connect Supabase)"}
+            {/* Backend & Auth Status Alert Banner */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div
+                className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+                  isFirebaseConfigured
+                    ? "bg-amber-50 border-amber-200 text-amber-900"
+                    : "bg-blue-50 border-blue-200 text-blue-900"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-amber-600" />
+                  <span className="font-semibold">
+                    Firebase Auth: {isFirebaseConfigured ? "🔥 Connected" : "⚡ Ready (Demo Mode)"}
+                  </span>
+                </div>
+                <span className="text-[11px] opacity-80">
+                  {isFirebaseConfigured ? "തത്സമയ ലോഗിൻ സജീവം" : ".env.local-ൽ കീകൾ നൽകാം"}
                 </span>
               </div>
-              <span className="text-[11px] opacity-80">
-                {isSupabaseConfigured
-                  ? "ക്ലൗഡ് ഡാറ്റാബേസിൽ തത്സമയം സേവ് ആകുന്നു"
-                  : ".env.local വഴി Supabase ആക്റ്റീവ് ആക്കാം"}
-              </span>
+
+              <div
+                className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+                  isSupabaseConfigured
+                    ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                    : "bg-muted border-border text-foreground"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Database className="w-4 h-4 text-emerald-600" />
+                  <span className="font-semibold">
+                    ഡാറ്റാബേസ്: {isSupabaseConfigured ? "⚡ Supabase Cloud" : "💾 Local Storage"}
+                  </span>
+                </div>
+                <span className="text-[11px] opacity-80">
+                  {isSupabaseConfigured ? "ക്ലൗഡ് സിങ്ക് സജീവം" : "റെഡി"}
+                </span>
+              </div>
             </div>
 
             <AdminDashboard
@@ -462,6 +589,13 @@ export default function Home() {
         onClose={() => setIsProfileOpen(false)}
         profile={customer}
         onSave={handleSaveProfile}
+      />
+
+      {/* Firebase Authentication Modal */}
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
       />
 
       {/* Cart Drawer with dynamic UPI */}

@@ -1,7 +1,17 @@
 "use client";
 
 import React from "react";
-import { Leaf, ShoppingBag, User, Store, PackageCheck, MapPin } from "lucide-react";
+import {
+  Leaf,
+  ShoppingBag,
+  User,
+  Store,
+  PackageCheck,
+  MapPin,
+  LogIn,
+  LogOut,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CustomerProfile } from "@/types";
@@ -15,6 +25,8 @@ interface NavbarProps {
   openCart: () => void;
   customer: CustomerProfile;
   openProfile: () => void;
+  openAuth: () => void;
+  onLogout: () => void;
   announcement?: string;
 }
 
@@ -26,6 +38,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   openCart,
   customer,
   openProfile,
+  openAuth,
+  onLogout,
   announcement,
 }) => {
   return (
@@ -108,24 +122,54 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Action buttons */}
         <div className="flex items-center gap-2">
-          {/* User Profile Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={openProfile}
-            className="text-xs flex items-center gap-1.5 border-dashed"
-          >
-            <User className="w-4 h-4 text-emerald-700" />
-            <span className="hidden md:inline max-w-[100px] truncate">
-              {customer.isRegistered && customer.name ? customer.name : "ലോഗിൻ / പ്രൊഫൈൽ"}
-            </span>
-          </Button>
+          {/* User Auth / Profile Button */}
+          {customer.isRegistered && customer.name ? (
+            <div className="flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={openProfile}
+                className="text-xs flex items-center gap-1.5 border-dashed h-8 px-2.5"
+                title="വിലാസവും പ്രൊഫൈലും മാറ്റുക"
+              >
+                {customer.photoURL ? (
+                  <img
+                    src={customer.photoURL}
+                    alt={customer.name}
+                    className="w-4 h-4 rounded-full object-cover"
+                  />
+                ) : (
+                  <User className="w-3.5 h-3.5 text-emerald-700" />
+                )}
+                <span className="max-w-[90px] truncate font-medium">
+                  {customer.name}
+                </span>
+              </Button>
+              <button
+                onClick={onLogout}
+                className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-muted rounded-lg transition-colors"
+                title="ലോഗൗട്ട് (Logout)"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={openAuth}
+              className="text-xs flex items-center gap-1.5 h-8 px-2.5 border-emerald-300 text-emerald-800 dark:text-emerald-200 bg-emerald-50/50 hover:bg-emerald-100"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>ലോഗിൻ</span>
+            </Button>
+          )}
 
           {/* Cart Button */}
           <Button
             onClick={openCart}
             size="sm"
-            className="bg-emerald-700 hover:bg-emerald-800 text-white relative shadow-sm"
+            className="bg-emerald-700 hover:bg-emerald-800 text-white relative shadow-sm h-8"
           >
             <ShoppingBag className="w-4 h-4 mr-1.5" />
             <span className="font-semibold text-xs">₹{cartTotal}</span>

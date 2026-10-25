@@ -13,13 +13,17 @@ export interface Product {
 }
 
 export interface CustomerProfile {
+  uid?: string;
   name: string;
+  email?: string;
   phone: string;
   address: string;
   landmark: string;
   zone: string;
   pincode: string;
   isRegistered: boolean;
+  authProvider?: "firebase" | "google" | "local";
+  photoURL?: string;
 }
 
 export interface CartItem {
