@@ -75,11 +75,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 variant="outline"
                 className="hidden sm:inline-flex text-[10px] bg-amber-50 text-amber-900 border-amber-300 font-bold"
               >
-                കർഷക കൂട്ടായ്മ
+                അരി കൂട്ടായ്മ
               </Badge>
             </div>
             <p className="text-[11px] text-muted-foreground hidden sm:block">
-              പാലക്കാട് നഗരസഭ • രണ്ടാം വിള നാടൻ കുത്തരി വിതരണം
+              പാലക്കാട് • അരി ഉല്പാദകരുടെയും ഉപഭോക്താക്കളുടെയും കൂട്ടായ്മ
             </p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-            <span>കർഷക അഡ്മിൻ</span>
+            <span>അഡ്മിൻ പാനൽ</span>
           </button>
         </nav>
 

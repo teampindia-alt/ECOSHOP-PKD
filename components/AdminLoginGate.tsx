@@ -44,9 +44,9 @@ export const AdminLoginGate: React.FC<AdminLoginGateProps> = ({
 
       {/* Title */}
       <div>
-        <h2 className="text-xl font-bold text-foreground">ടീം പാഡി - കർഷക അഡ്മിൻ</h2>
+        <h2 className="text-xl font-bold text-foreground">ടീം പാഡി - അഡ്മിൻ പാനൽ</h2>
         <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto leading-relaxed">
-          പാലക്കാട്ടെ കർഷക കൂട്ടായ്മയ്ക്ക് വരുന്ന അരി ഓർഡറുകൾ കാണാനും, വിലയും സ്റ്റോക്കും മാറ്റാനും അഡ്മിൻ പാസ്‌വേഡ് നൽകുക.
+          അരി ഉല്പാദകരുടെയും ഉപഭോക്താക്കളുടെയും കൂട്ടായ്മയിലേക്ക് വരുന്ന ഓർഡറുകൾ കാണാനും, വിലയും സ്റ്റോക്കും മാറ്റാനും അഡ്മിൻ പാസ്‌വേഡ് നൽകുക.
         </p>
       </div>
 

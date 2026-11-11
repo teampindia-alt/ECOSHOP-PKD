@@ -375,7 +375,7 @@ export default function Home() {
               <div className="relative z-10 max-w-2xl space-y-3">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold backdrop-blur-xs border border-amber-400/30">
                   <span className="text-sm">🌾</span>
-                  <span>പാലക്കാട് നഗരസഭയിലെ കർഷക കൂട്ടായ്മ (Team Paddy PKD)</span>
+                  <span>അരി ഉല്പാദകരുടെയും ഉപഭോക്താക്കളുടെയും കൂട്ടായ്മ (Team Paddy PKD)</span>
                 </div>
 
                 <h1 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
@@ -619,7 +619,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <Wheat className="w-4 h-4 text-emerald-700" />
             <span className="font-bold text-foreground">{shopSettings.shopName}</span>
-            <span>• പാലക്കാട് നഗരസഭയിലെ കർഷക കൂട്ടായ്മ</span>
+            <span>• അരി ഉല്പാദകരുടെയും ഉപഭോക്താക്കളുടെയും കൂട്ടായ്മ</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
             <span>📞 ഹെൽപ്‌ലൈൻ: {shopSettings.phone}</span>

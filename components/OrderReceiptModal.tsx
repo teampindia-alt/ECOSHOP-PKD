@@ -36,7 +36,7 @@ export const OrderReceiptModal: React.FC<OrderReceiptModalProps> = ({ order, onC
           </div>
           <h2 className="text-xl font-bold">ഓർഡർ വിജയകരമായി നൽകി!</h2>
           <p className="text-xs text-emerald-100 mt-1">
-            ടീം പാഡി കർഷക കൂട്ടായ്മയിലേക്ക് നിങ്ങളുടെ ഓർഡർ ലഭിച്ചിട്ടുണ്ട്.
+            ടീം പാഡി - അരി ഉല്പാദകരുടെയും ഉപഭോക്താക്കളുടെയും കൂട്ടായ്മയിലേക്ക് നിങ്ങളുടെ ഓർഡർ ലഭിച്ചിട്ടുണ്ട്.
           </p>
           <div className="mt-3 inline-block bg-white/20 px-3 py-1 rounded-full font-mono text-xs font-bold">
             Order #{order.id}
