@@ -40,15 +40,15 @@ export const InstallPwaPrompt: React.FC = () => {
   if (isDismissed) return null;
 
   return (
-    <div className="bg-gradient-to-r from-emerald-900 to-teal-900 text-white px-4 py-2 border-b text-xs flex items-center justify-between gap-2 shadow-xs">
+    <div className="bg-gradient-to-r from-emerald-950 via-teal-900 to-emerald-900 text-white px-4 py-2 border-b text-xs flex items-center justify-between gap-2 shadow-xs">
       <div className="flex items-center gap-2">
-        <div className="p-1 bg-emerald-500/20 rounded-lg">
-          <Smartphone className="w-4 h-4 text-emerald-300" />
+        <div className="p-1 bg-amber-500/20 rounded-lg">
+          <Smartphone className="w-4 h-4 text-amber-300" />
         </div>
         <div>
-          <span className="font-semibold">പാലക്കാട് എക്കോ ഷോപ്പ് മൊബൈൽ ആപ്പ്</span>
+          <span className="font-semibold">ടീം പാഡി പാലക്കാട് മൊബൈൽ ആപ്പ്</span>
           <span className="hidden sm:inline text-emerald-200 ml-1.5">
-            • വേഗത്തിൽ ഓർഡർ ചെയ്യാൻ നിങ്ങളുടെ ഫോണിൽ ഇൻസ്റ്റാൾ ചെയ്യാം!
+            • രണ്ടാം വിള നാടൻ കുത്തരി ഫോണിലൂടെ വേഗത്തിൽ ഓർഡർ ചെയ്യാൻ ഇൻസ്റ്റാൾ ചെയ്യാം!
           </span>
         </div>
       </div>

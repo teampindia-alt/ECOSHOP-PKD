@@ -70,7 +70,7 @@ export const CustomerProfileModal: React.FC<CustomerProfileModalProps> = ({
             </div>
             <div>
               <h2 className="text-base font-bold">ഉപഭോക്തൃ വിവരങ്ങൾ (Customer Details)</h2>
-              <p className="text-xs text-emerald-100">പാലക്കാട് ഡെലിവറിക്ക് വേണ്ടിയുള്ള വിലാസവും ഫോൺ നമ്പറും</p>
+              <p className="text-xs text-emerald-100">ടീം പാഡി അരി ഡെലിവറിക്കായുള്ള വിലാസവും ഫോൺ നമ്പറും</p>
             </div>
           </div>
           <button

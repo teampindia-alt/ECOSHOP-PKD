@@ -1,13 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#047857" />
-      <stop offset="100%" stop-color="#064e3b" />
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="50%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#065f46" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#eab308" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="128" fill="url(#grad)" />
-  <path d="M380 140c-90 0-160 50-200 110-30 45-45 100-45 150 50 0 105-15 150-45 60-40 110-110 110-200l-15-15z" fill="#34d399" opacity="0.3" />
-  <path d="M360 160c-80 0-140 45-175 100-25 40-40 85-40 130 45 0 90-15 130-40 55-35 100-95 100-175l-15-15z" fill="#6ee7b7" />
-  <path d="M145 390c50-50 110-100 180-140" stroke="#064e3b" stroke-width="14" stroke-linecap="round" />
-  <circle cx="390" cy="120" r="16" fill="#fbbf24" />
+  <!-- Background Rounded Rect -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+
+  <!-- Outer soft glow ring -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="#34d399" stroke-width="6" opacity="0.25" />
+
+  <!-- Stems of Paddy -->
+  <path d="M256 430 Q250 300 256 120" stroke="url(#goldGrad)" stroke-width="12" stroke-linecap="round" fill="none" />
+  <path d="M256 360 Q180 280 160 170" stroke="url(#goldGrad)" stroke-width="10" stroke-linecap="round" fill="none" />
+  <path d="M256 360 Q332 280 352 170" stroke="url(#goldGrad)" stroke-width="10" stroke-linecap="round" fill="none" />
+
+  <!-- Center Paddy Grains -->
+  <ellipse cx="256" cy="115" rx="14" ry="24" fill="url(#goldGrad)" />
+  <ellipse cx="240" cy="155" rx="14" ry="24" transform="rotate(-25 240 155)" fill="url(#goldGrad)" />
+  <ellipse cx="272" cy="155" rx="14" ry="24" transform="rotate(25 272 155)" fill="url(#goldGrad)" />
+  <ellipse cx="236" cy="205" rx="15" ry="25" transform="rotate(-30 236 205)" fill="url(#goldGrad)" />
+  <ellipse cx="276" cy="205" rx="15" ry="25" transform="rotate(30 276 205)" fill="url(#goldGrad)" />
+  <ellipse cx="232" cy="260" rx="15" ry="26" transform="rotate(-35 232 260)" fill="url(#goldGrad)" />
+  <ellipse cx="280" cy="260" rx="15" ry="26" transform="rotate(35 280 260)" fill="url(#goldGrad)" />
+  <ellipse cx="230" cy="315" rx="14" ry="24" transform="rotate(-40 230 315)" fill="url(#goldGrad)" />
+  <ellipse cx="282" cy="315" rx="14" ry="24" transform="rotate(40 282 315)" fill="url(#goldGrad)" />
+
+  <!-- Left Paddy Grains -->
+  <ellipse cx="160" cy="165" rx="12" ry="20" transform="rotate(-40 160 165)" fill="url(#goldGrad)" />
+  <ellipse cx="178" cy="210" rx="13" ry="22" transform="rotate(-35 178 210)" fill="url(#goldGrad)" />
+  <ellipse cx="200" cy="260" rx="13" ry="22" transform="rotate(-30 200 260)" fill="url(#goldGrad)" />
+
+  <!-- Right Paddy Grains -->
+  <ellipse cx="352" cy="165" rx="12" ry="20" transform="rotate(40 352 165)" fill="url(#goldGrad)" />
+  <ellipse cx="334" cy="210" rx="13" ry="22" transform="rotate(35 334 210)" fill="url(#goldGrad)" />
+  <ellipse cx="312" cy="260" rx="13" ry="22" transform="rotate(30 312 260)" fill="url(#goldGrad)" />
+
+  <!-- Team Paddy Text Banner at base -->
+  <rect x="96" y="415" width="320" height="48" rx="24" fill="#047857" opacity="0.95" stroke="#facc15" stroke-width="3" />
+  <text x="256" y="446" font-family="Arial, sans-serif" font-weight="900" font-size="20" fill="#fef08a" text-anchor="middle" letter-spacing="2">TEAM PADDY PKD</text>
 </svg>

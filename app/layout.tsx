@@ -16,13 +16,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "പാലക്കാട് എക്കോ ഷോപ്പ് | Palakkad Eco Shop",
-  description: "പാലക്കാടൻ നാട്ടുനന്മകളും ഓർഗാനിക് ഉൽപ്പന്നങ്ങളും ഓൺലൈനായി വാങ്ങാം. ഹൈപ്പർ ലോക്കൽ ഡെലിവറി.",
+  title: "ടീം പാഡി പാലക്കാട് | Team Paddy Palakkad - കർഷക കൂട്ടായ്മ",
+  description: "പാലക്കാട് നഗരസഭയിലെ കർഷകരുടെ രണ്ടാം വിള നാടൻ കുത്തരി (മട്ടയരി 10Kg, 25Kg, 50Kg) നേരിട്ട് വീട്ടുപടിക്കൽ ഓർഡർ ചെയ്യാം.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "EcoShop PKD",
+    title: "Team Paddy PKD",
   },
   icons: {
     icon: "/icon.svg",

@@ -18,7 +18,7 @@ export const OrderReceiptModal: React.FC<OrderReceiptModalProps> = ({ order, onC
     .map((i) => `• ${i.nameMl} (${i.quantity} x ${i.unit}) - ₹${i.unitPrice * i.quantity}`)
     .join("%0A");
 
-  const whatsappMessage = `*പാലക്കാട് എക്കോ ഷോപ്പ് - പുതിയ ഓർഡർ #${order.id}*%0A%0A*കസ്റ്റമർ വിവരങ്ങൾ:*%0Aപേര്: ${order.customer.name}%0Aഫോൺ: ${order.customer.phone}%0Aവിലാസം: ${order.customer.address}%0ALandmark: ${order.customer.landmark || "N/A"}%0Aഡെലിവറി പ്രദേശം: ${order.customer.zone}%0A%0A*സാധനങ്ങൾ:*%0A${orderItemsText}%0A%0A*ആകെ തുക:* ₹${order.total}%0Aപേയ്‌മെന്റ് രീതി: ${order.paymentMethod === "cod" ? "Cash on Delivery" : "UPI"}`;
+  const whatsappMessage = `*ടീം പാഡി പാലക്കാട് - പുതിയ അരി ഓർഡർ #${order.id}*%0A%0A*കസ്റ്റമർ വിവരങ്ങൾ:*%0Aപേര്: ${order.customer.name}%0Aഫോൺ: ${order.customer.phone}%0Aവിലാസം: ${order.customer.address}%0ALandmark: ${order.customer.landmark || "N/A"}%0Aഡെലിവറി പ്രദേശം: ${order.customer.zone}%0A%0A*ഓർഡർ ചെയ്ത അരി:*%0A${orderItemsText}%0A%0A*ആകെ തുക:* ₹${order.total}%0Aപേയ്‌മെന്റ് രീതി: ${order.paymentMethod === "cod" ? "Cash on Delivery" : "UPI"}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
@@ -36,7 +36,7 @@ export const OrderReceiptModal: React.FC<OrderReceiptModalProps> = ({ order, onC
           </div>
           <h2 className="text-xl font-bold">ഓർഡർ വിജയകരമായി നൽകി!</h2>
           <p className="text-xs text-emerald-100 mt-1">
-            പാലക്കാട് എക്കോ ഷോപ്പിലേക്ക് നിങ്ങളുടെ ഓർഡർ ലഭിച്ചിട്ടുണ്ട്.
+            ടീം പാഡി കർഷക കൂട്ടായ്മയിലേക്ക് നിങ്ങളുടെ ഓർഡർ ലഭിച്ചിട്ടുണ്ട്.
           </p>
           <div className="mt-3 inline-block bg-white/20 px-3 py-1 rounded-full font-mono text-xs font-bold">
             Order #{order.id}

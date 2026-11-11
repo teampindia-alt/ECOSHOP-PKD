@@ -1,7 +1,7 @@
 {
-  "name": "പാലക്കാട് എക്കോ ഷോപ്പ് - Palakkad Eco Shop",
-  "short_name": "EcoShop PKD",
-  "description": "പാലക്കാടൻ നാട്ടുനന്മകളും ഓർഗാനിക് ഉൽപ്പന്നങ്ങളും ഓൺലൈനായി വാങ്ങാം",
+  "name": "ടീം പാഡി പാലക്കാട് - Team Paddy Palakkad",
+  "short_name": "Team Paddy",
+  "description": "പാലക്കാട് നഗരസഭയിലെ കർഷകരുടെ രണ്ടാം വിള നാടൻ കുത്തരി (മട്ടയരി) നേരിട്ട് വീട്ടുപടിക്കൽ",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

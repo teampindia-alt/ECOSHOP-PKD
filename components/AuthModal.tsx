@@ -161,7 +161,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   : "പാസ്‌വേഡ് മാറ്റുക"}
               </h2>
               <p className="text-xs text-emerald-200">
-                പാലക്കാട് എക്കോ ഷോപ്പ് • Firebase സുരക്ഷിത ലോഗിൻ
+                ടീം പാഡി പാലക്കാട് • സുരക്ഷിത കസ്റ്റമർ ലോഗിൻ
               </p>
             </div>
           </div>

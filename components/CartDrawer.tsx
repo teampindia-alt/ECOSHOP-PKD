@@ -83,7 +83,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const finalizeOrder = (method: "cod" | "upi", transactionId?: string) => {
     setIsSubmitting(true);
 
-    const orderId = `PKD-ECO-${Math.floor(1000 + Math.random() * 9000)}`;
+    const orderId = `TEAM-PADDY-${Math.floor(1000 + Math.random() * 9000)}`;
     const newOrder: Order = {
       id: orderId,
       customer: { ...customer },
@@ -143,7 +143,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
                 <p className="font-semibold text-sm">നിങ്ങളുടെ കാർട്ട് കാലിയാണ്!</p>
                 <p className="text-xs text-muted-foreground max-w-xs mx-auto">
-                  പാലക്കാട് എക്കോ ഷോപ്പിലെ ഓർഗാനിക് ഉൽപ്പന്നങ്ങൾ കാർട്ടിലേക്ക് ചേർക്കൂ.
+                  ടീം പാടിയുടെ രണ്ടാം വിള നാടൻ കുത്തരി ചാക്കുകൾ കാർട്ടിലേക്ക് ചേർക്കൂ.
                 </p>
                 <Button
                   variant="outline"

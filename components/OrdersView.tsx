@@ -53,7 +53,7 @@ export const OrdersView: React.FC<OrdersViewProps> = ({ orders, onOpenShop, onVi
           </div>
           <p className="font-bold text-base">നിങ്ങൾ ഇതുവരെ ഓർഡറുകൾ ഒന്നും നൽകിയിട്ടില്ല.</p>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-            പാലക്കാട് എക്കോ ഷോപ്പിലെ ഓർഗാനിക് ഉൽപ്പന്നങ്ങൾ തിരഞ്ഞെടുത്ത് ഓർഡർ ചെയ്യൂ.
+            ടീം പാഡിയുടെ നാടൻ കുത്തരി തിരഞ്ഞെടുത്ത് ഓർഡർ ചെയ്യൂ.
           </p>
           <Button onClick={onOpenShop} className="bg-emerald-700 hover:bg-emerald-800 text-white text-xs mt-2">
             ഷോപ്പിലേക്ക് പോകുക

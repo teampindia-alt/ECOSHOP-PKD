@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Search,
-  Sparkles,
+  Wheat,
   ShoppingBag,
   Leaf,
   ShieldCheck,
@@ -14,6 +14,7 @@ import {
   QrCode,
   Flame,
   UserCheck,
+  Sparkles,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { ProductCard } from "@/components/ProductCard";
@@ -61,7 +62,7 @@ export default function Home() {
     phone: "",
     address: "",
     landmark: "",
-    zone: "pkd-town",
+    zone: "pkd-muni-central",
     pincode: "678001",
     isRegistered: false,
     authProvider: "local",
@@ -76,7 +77,7 @@ export default function Home() {
   // Check admin session
   useEffect(() => {
     try {
-      const adminSession = sessionStorage.getItem("palakkad_admin_logged_in");
+      const adminSession = sessionStorage.getItem("teampaddy_admin_logged_in");
       if (adminSession === "true") setIsAdminLoggedIn(true);
     } catch (e) {}
   }, []);
@@ -84,14 +85,14 @@ export default function Home() {
   const handleAdminLoginSuccess = () => {
     setIsAdminLoggedIn(true);
     try {
-      sessionStorage.setItem("palakkad_admin_logged_in", "true");
+      sessionStorage.setItem("teampaddy_admin_logged_in", "true");
     } catch (e) {}
   };
 
   const handleAdminLock = () => {
     setIsAdminLoggedIn(false);
     try {
-      sessionStorage.removeItem("palakkad_admin_logged_in");
+      sessionStorage.removeItem("teampaddy_admin_logged_in");
     } catch (e) {}
     setActiveTab("shop");
   };
@@ -113,7 +114,7 @@ export default function Home() {
               ? "google"
               : "firebase",
           };
-          localStorage.setItem("palakkad_eco_customer", JSON.stringify(updated));
+          localStorage.setItem("teampaddy_customer", JSON.stringify(updated));
           return updated;
         });
       }
@@ -139,10 +140,15 @@ export default function Home() {
         }
       } else {
         try {
-          const savedProducts = localStorage.getItem("palakkad_eco_products");
-          if (savedProducts) setProducts(JSON.parse(savedProducts));
+          const savedProducts = localStorage.getItem("teampaddy_products");
+          if (savedProducts) {
+            setProducts(JSON.parse(savedProducts));
+          } else {
+            setProducts(INITIAL_PRODUCTS);
+            localStorage.setItem("teampaddy_products", JSON.stringify(INITIAL_PRODUCTS));
+          }
 
-          const savedOrders = localStorage.getItem("palakkad_eco_orders");
+          const savedOrders = localStorage.getItem("teampaddy_orders");
           if (savedOrders) setOrders(JSON.parse(savedOrders));
         } catch (e) {
           console.error("Failed to load local storage", e);
@@ -150,14 +156,19 @@ export default function Home() {
       }
 
       try {
-        const savedCustomer = localStorage.getItem("palakkad_eco_customer");
+        const savedCustomer = localStorage.getItem("teampaddy_customer") || localStorage.getItem("palakkad_eco_customer");
         if (savedCustomer) setCustomer(JSON.parse(savedCustomer));
 
-        const savedCart = localStorage.getItem("palakkad_eco_cart");
+        const savedCart = localStorage.getItem("teampaddy_cart");
         if (savedCart) setCart(JSON.parse(savedCart));
 
-        const savedSettings = localStorage.getItem("palakkad_eco_settings");
-        if (savedSettings) setShopSettings(JSON.parse(savedSettings));
+        const savedSettings = localStorage.getItem("teampaddy_settings");
+        if (savedSettings) {
+          setShopSettings(JSON.parse(savedSettings));
+        } else {
+          setShopSettings(DEFAULT_SHOP_SETTINGS);
+          localStorage.setItem("teampaddy_settings", JSON.stringify(DEFAULT_SHOP_SETTINGS));
+        }
       } catch (e) {
         console.error("Failed to load customer/cart/settings", e);
       }
@@ -186,7 +197,7 @@ export default function Home() {
         isRegistered: true,
         authProvider: userData.authProvider,
       };
-      localStorage.setItem("palakkad_eco_customer", JSON.stringify(updated));
+      localStorage.setItem("teampaddy_customer", JSON.stringify(updated));
       return updated;
     });
 
@@ -203,26 +214,26 @@ export default function Home() {
       phone: "",
       address: "",
       landmark: "",
-      zone: "pkd-town",
+      zone: "pkd-muni-central",
       pincode: "678001",
       isRegistered: false,
       authProvider: "local",
     };
     setCustomer(guestCustomer);
-    localStorage.removeItem("palakkad_eco_customer");
+    localStorage.removeItem("teampaddy_customer");
   };
 
   // Update Shop Settings
   const handleUpdateShopSettings = (newSettings: ShopSettings) => {
     setShopSettings(newSettings);
-    localStorage.setItem("palakkad_eco_settings", JSON.stringify(newSettings));
+    localStorage.setItem("teampaddy_settings", JSON.stringify(newSettings));
   };
 
   // Sync products to Supabase & localStorage
   const handleAddProduct = async (newProd: Product) => {
     const updated = [newProd, ...products];
     setProducts(updated);
-    localStorage.setItem("palakkad_eco_products", JSON.stringify(updated));
+    localStorage.setItem("teampaddy_products", JSON.stringify(updated));
 
     if (isSupabaseConfigured) {
       await addProductToDb(newProd);
@@ -232,7 +243,7 @@ export default function Home() {
   const handleUpdateProduct = async (updatedProd: Product) => {
     const updated = products.map((p) => (p.id === updatedProd.id ? updatedProd : p));
     setProducts(updated);
-    localStorage.setItem("palakkad_eco_products", JSON.stringify(updated));
+    localStorage.setItem("teampaddy_products", JSON.stringify(updated));
 
     if (isSupabaseConfigured) {
       await updateProductInDb(updatedProd);
@@ -242,7 +253,7 @@ export default function Home() {
   const handleDeleteProduct = async (productId: string) => {
     const updated = products.filter((p) => p.id !== productId);
     setProducts(updated);
-    localStorage.setItem("palakkad_eco_products", JSON.stringify(updated));
+    localStorage.setItem("teampaddy_products", JSON.stringify(updated));
 
     if (isSupabaseConfigured) {
       await deleteProductFromDb(productId);
@@ -261,7 +272,7 @@ export default function Home() {
       } else {
         updated = [...prev, { product, quantity: 1 }];
       }
-      localStorage.setItem("palakkad_eco_cart", JSON.stringify(updated));
+      localStorage.setItem("teampaddy_cart", JSON.stringify(updated));
       return updated;
     });
   };
@@ -276,27 +287,27 @@ export default function Home() {
           item.product.id === productId ? { ...item, quantity } : item
         );
       }
-      localStorage.setItem("palakkad_eco_cart", JSON.stringify(updated));
+      localStorage.setItem("teampaddy_cart", JSON.stringify(updated));
       return updated;
     });
   };
 
   const handleClearCart = () => {
     setCart([]);
-    localStorage.removeItem("palakkad_eco_cart");
+    localStorage.removeItem("teampaddy_cart");
   };
 
   // Save Customer Profile
   const handleSaveProfile = (updated: CustomerProfile) => {
     setCustomer(updated);
-    localStorage.setItem("palakkad_eco_customer", JSON.stringify(updated));
+    localStorage.setItem("teampaddy_customer", JSON.stringify(updated));
   };
 
   // Order Placement
   const handleOrderPlaced = async (newOrder: Order) => {
     const updatedOrders = [newOrder, ...orders];
     setOrders(updatedOrders);
-    localStorage.setItem("palakkad_eco_orders", JSON.stringify(updatedOrders));
+    localStorage.setItem("teampaddy_orders", JSON.stringify(updatedOrders));
     handleClearCart();
     setLastOrder(newOrder);
 
@@ -309,7 +320,7 @@ export default function Home() {
   const handleUpdateOrderStatus = async (orderId: string, status: OrderStatus) => {
     const updated = orders.map((o) => (o.id === orderId ? { ...o, status } : o));
     setOrders(updated);
-    localStorage.setItem("palakkad_eco_orders", JSON.stringify(updated));
+    localStorage.setItem("teampaddy_orders", JSON.stringify(updated));
 
     if (isSupabaseConfigured) {
       await updateOrderStatusInDb(orderId, status);
@@ -319,12 +330,9 @@ export default function Home() {
   // Filter Categories
   const categories = [
     "എല്ലാം",
-    "ജൈവ പച്ചക്കറികൾ",
-    "പ്രകൃതിദത്ത എണ്ണകൾ",
-    "പരമ്പരാഗത പലഹാരങ്ങൾ",
-    "ധാന്യങ്ങൾ",
-    "മസാലകൾ",
-    "ഇക്കോ ക്ലീനിംഗ്",
+    "നാടൻ കുത്തരി (മട്ടയരി)",
+    "അരിപ്പൊടികളും അവലും",
+    "മറ്റ് കാർഷിക ഉൽപ്പന്നങ്ങൾ",
   ];
 
   const filteredProducts = products.filter((prod) => {
@@ -341,7 +349,7 @@ export default function Home() {
   const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col antialiased text-foreground selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen bg-background flex flex-col antialiased text-foreground selection:bg-amber-100 selection:text-emerald-950">
       {/* Navigation with PWA prompt, Auth, and Announcement */}
       <Navbar
         activeTab={activeTab}
@@ -360,36 +368,37 @@ export default function Home() {
       <main className="flex-1 container mx-auto px-4 py-6 max-w-6xl">
         {activeTab === "shop" && (
           <div className="space-y-6">
-            {/* Hero Banner */}
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 via-teal-900 to-emerald-950 text-white p-6 sm:p-10 shadow-xl">
-              <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none"></div>
+            {/* Hero Banner: Team Paddy Palakkad */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 text-white p-6 sm:p-10 shadow-xl border border-emerald-800/40">
+              <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 rounded-full bg-amber-400/10 blur-3xl pointer-events-none"></div>
 
               <div className="relative z-10 max-w-2xl space-y-3">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700/60 text-emerald-200 text-xs font-semibold backdrop-blur-xs border border-emerald-500/30">
-                  <Leaf className="w-3.5 h-3.5 text-emerald-300" />
-                  <span>100% പ്രകൃതിദത്തം & രാസവളമുക്തം</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold backdrop-blur-xs border border-amber-400/30">
+                  <span className="text-sm">🌾</span>
+                  <span>പാലക്കാട് നഗരസഭയിലെ കർഷക കൂട്ടായ്മ (Team Paddy PKD)</span>
                 </div>
 
-                <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-                  പാലക്കാടൻ നാട്ടുനന്മകൾ, <br />
-                  <span className="text-emerald-300">നിങ്ങളുടെ വീട്ടുപടിക്കൽ!</span>
+                <h1 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
+                  രണ്ടാം വിള നാടൻ കുത്തരി, <br />
+                  <span className="text-amber-300">പാടത്തുനിന്ന് നേരിട്ട് നിങ്ങളുടെ വീട്ടിലേക്ക്!</span>
                 </h1>
 
-                <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed max-w-xl">
-                  പാലക്കാട്ടെ പ്രാദേശിക കർഷകരിൽ നിന്ന് ശേഖരിച്ച ശുദ്ധമായ മട്ടയരി, മരച്ചക്കിലാട്ടിയ വെളിച്ചെണ്ണ,
-                  വനതേൻ, പശുവിൻ നെയ്യ്, കൽപ്പാത്തി പലഹാരങ്ങൾ എന്നിവ എളുപ്പത്തിൽ ഓർഡർ ചെയ്യാം.
+                <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-xl">
+                  ഇടനിലക്കാരില്ലാതെ പാലക്കാട് നഗരസഭയിലെ കർഷകർ സ്വന്തം പാടത്ത് വിളവെടുത്ത രണ്ടാം വിള നെല്ല്
+                  പരമ്പരാഗതമായി പുഴുങ്ങി കുത്തിയെടുത്ത മായമില്ലാത്ത തനി നാടൻ മട്ടയരി.
+                  10Kg, 25Kg, 50Kg ചാക്കുകളിൽ ഓർഡർ ചെയ്യാം.
                 </p>
 
                 {/* Features Badges */}
-                <div className="pt-2 flex flex-wrap gap-3 text-xs text-emerald-100/90">
-                  <span className="flex items-center gap-1">
-                    <Truck className="w-4 h-4 text-emerald-300" /> ₹{shopSettings.freeDeliveryThreshold} മുകളിൽ ഫ്രീ ഡെലിവറി
+                <div className="pt-2 flex flex-wrap gap-2.5 text-xs text-emerald-100">
+                  <span className="flex items-center gap-1 bg-emerald-800/60 px-3 py-1 rounded-lg border border-emerald-700/50">
+                    <Truck className="w-3.5 h-3.5 text-amber-300" /> പാലക്കാട് ഡോർ ഡെലിവറി
                   </span>
-                  <span className="flex items-center gap-1">
-                    <QrCode className="w-4 h-4 text-emerald-300" /> UPI / GPay QR പേയ്‌മെന്റ്
+                  <span className="flex items-center gap-1 bg-emerald-800/60 px-3 py-1 rounded-lg border border-emerald-700/50">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-300" /> 100% തവിടുള്ള നാടൻ കുത്തരി
                   </span>
-                  <span className="flex items-center gap-1">
-                    <HeartHandshake className="w-4 h-4 text-emerald-300" /> ക്യാഷ് ഓൺ ഡെലിവറി (COD)
+                  <span className="flex items-center gap-1 bg-emerald-800/60 px-3 py-1 rounded-lg border border-emerald-700/50">
+                    <QrCode className="w-3.5 h-3.5 text-amber-300" /> UPI / Cash on Delivery
                   </span>
                 </div>
               </div>
@@ -397,16 +406,16 @@ export default function Home() {
 
             {/* User welcome or registration prompt strip */}
             {!customer.isRegistered ? (
-              <div className="p-3 rounded-2xl border bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+              <div className="p-3.5 rounded-2xl border bg-amber-50/80 dark:bg-amber-950/30 border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
                 <div className="flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-amber-500" />
+                  <span className="text-base">🌾</span>
                   <span>
-                    <strong>Firebase ലോഗിൻ:</strong> വേഗത്തിൽ ഓർഡർ ചെയ്യാനും വിലാസം സേവ് ചെയ്യാനും ലോഗിൻ ചെയ്യുക.
+                    <strong>കസ്റ്റമർ രജിസ്ട്രേഷൻ:</strong> ഫോൺ നമ്പറും വീട്ടുപേരും നൽകി രജിസ്റ്റർ ചെയ്താൽ അരി നിങ്ങളുടെ വീട്ടുപടിക്കൽ നേരിട്ടെത്തിക്കും.
                   </span>
                 </div>
                 <button
                   onClick={() => setIsAuthOpen(true)}
-                  className="font-bold text-emerald-800 dark:text-emerald-300 hover:underline"
+                  className="font-bold text-emerald-900 dark:text-amber-300 hover:underline shrink-0"
                 >
                   ലോഗിൻ / രജിസ്റ്റർ ചെയ്യുക &rarr;
                 </button>
@@ -414,14 +423,14 @@ export default function Home() {
             ) : (
               <div className="p-3 rounded-2xl border bg-muted/40 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
-                  <UserCheck className="w-4 h-4 text-emerald-600" />
+                  <UserCheck className="w-4 h-4 text-emerald-700" />
                   <span>
-                    സ്വാഗതം, <strong>{customer.name}</strong>! പാലക്കാട് ഡെലിവറി ലഭ്യമാണ്.
+                    സ്വാഗതം, <strong>{customer.name}</strong>! പാലക്കാട് നഗരസഭാ പരിധിയിൽ ഡെലിവറി ലഭ്യമാണ്.
                   </span>
                 </div>
                 <button
                   onClick={() => setIsProfileOpen(true)}
-                  className="text-emerald-700 font-semibold hover:underline"
+                  className="text-emerald-800 dark:text-emerald-300 font-semibold hover:underline"
                 >
                   📍 {customer.address ? "വിലാസം മാറ്റുക" : "+ ഡെലിവറി വിലാസം നൽകുക"}
                 </button>
@@ -435,10 +444,10 @@ export default function Home() {
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="ഉൽപ്പന്നങ്ങളുടെ പേര് തിരയുക (ഉദാ: മട്ടയരി, നെയ്യ്, എണ്ണ, തേൻ)..."
+                  placeholder="അരി ചാക്കുകൾ തിരയുക (10 കിലോ, 25 കിലോ, 50 കിലോ, പുട്ടുപൊടി)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-11 pl-10 pr-4 rounded-xl border bg-card text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
+                  className="w-full h-11 pl-10 pr-4 rounded-xl border bg-card text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-700 shadow-2xs"
                 />
                 {searchQuery && (
                   <button
@@ -458,7 +467,7 @@ export default function Home() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                       selectedCategory === cat
-                        ? "bg-emerald-700 text-white shadow-xs"
+                        ? "bg-emerald-800 text-white shadow-xs"
                         : "bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground"
                     }`}
                   >
@@ -472,17 +481,17 @@ export default function Home() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-base sm:text-lg flex items-center gap-2">
-                  <span>ഉൽപ്പന്നങ്ങൾ</span>
+                  <span>രണ്ടാം വിള നാടൻ മട്ടയരി & ഉൽപ്പന്നങ്ങൾ</span>
                   <span className="text-xs text-muted-foreground font-normal">
-                    ({filteredProducts.length} എണ്ണം)
+                    ({filteredProducts.length} ഇനങ്ങൾ)
                   </span>
                 </h2>
               </div>
 
               {filteredProducts.length === 0 ? (
                 <div className="py-16 text-center bg-card rounded-2xl border p-6 space-y-2">
-                  <Leaf className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
-                  <p className="font-bold text-sm">ക്ഷമിക്കുക, ഉൽപ്പന്നങ്ങൾ ഒന്നും കണ്ടെത്താനായില്ല!</p>
+                  <Wheat className="w-10 h-10 mx-auto text-muted-foreground opacity-50" />
+                  <p className="font-bold text-sm">ഉൽപ്പന്നങ്ങൾ ഒന്നും കണ്ടെത്താനായില്ല!</p>
                   <p className="text-xs text-muted-foreground">
                     മറ്റൊരു പേരോ കാറ്റഗറിയോ തിരഞ്ഞു നോക്കൂ.
                   </p>
@@ -521,7 +530,7 @@ export default function Home() {
           <div className="space-y-4">
             {!isAdminLoggedIn ? (
               <AdminLoginGate
-                currentPassword={shopSettings.adminPassword || "palakkad@eco"}
+                currentPassword={shopSettings.adminPassword || "teampaddy@pkd"}
                 onSuccess={handleAdminLoginSuccess}
                 onCancel={() => setActiveTab("shop")}
               />
@@ -588,17 +597,17 @@ export default function Home() {
         <div className="fixed bottom-4 left-4 right-4 sm:hidden z-30 animate-in slide-in-from-bottom-4">
           <button
             onClick={() => setIsCartOpen(true)}
-            className="w-full bg-emerald-800 text-white p-3 rounded-2xl shadow-xl flex items-center justify-between font-bold text-xs"
+            className="w-full bg-emerald-900 text-white p-3 rounded-2xl shadow-xl flex items-center justify-between font-bold text-xs"
           >
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px]">
+              <span className="w-6 h-6 rounded-full bg-amber-400 text-emerald-950 flex items-center justify-center text-[10px] font-black">
                 {cartCount}
               </span>
-              <span>കാർട്ടിൽ {cartCount} ഉൽപ്പന്നങ്ങൾ</span>
+              <span>കാർട്ടിൽ {cartCount} ഇനങ്ങൾ</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span>₹{cartTotal} • ഓർഡർ ചെയ്യുക</span>
-              <ShoppingBag className="w-4 h-4" />
+              <ShoppingBag className="w-4 h-4 text-amber-300" />
             </div>
           </button>
         </div>
@@ -608,9 +617,9 @@ export default function Home() {
       <footer className="border-t bg-muted/30 py-8 text-xs text-muted-foreground mt-12">
         <div className="container mx-auto px-4 max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Leaf className="w-4 h-4 text-emerald-600" />
-            <span className="font-semibold text-foreground">{shopSettings.shopName}</span>
-            <span>• ഓർഗാനിക് & ഇക്കോ ഫ്രണ്ട്‌ലി സ്റ്റോർ, പാലക്കാട്</span>
+            <Wheat className="w-4 h-4 text-emerald-700" />
+            <span className="font-bold text-foreground">{shopSettings.shopName}</span>
+            <span>• പാലക്കാട് നഗരസഭയിലെ കർഷക കൂട്ടായ്മ</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
             <span>📞 ഹെൽപ്‌ലൈൻ: {shopSettings.phone}</span>

@@ -66,10 +66,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
     nameMl: "",
     nameEn: "",
-    category: "ജൈവ പച്ചക്കറികൾ",
-    price: 100,
-    originalPrice: 120,
-    unit: "1 Kg",
+    category: "നാടൻ കുത്തരി (മട്ടയരി)",
+    price: 550,
+    originalPrice: 600,
+    unit: "10 Kg ചാക്ക്",
     image: PRODUCT_IMAGE_PRESETS[0].url,
     description: "",
     inStock: true,
@@ -108,10 +108,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setNewProduct({
       nameMl: "",
       nameEn: "",
-      category: "ജൈവ പച്ചക്കറികൾ",
-      price: 100,
-      originalPrice: 120,
-      unit: "1 Kg",
+      category: "നാടൻ കുത്തരി (മട്ടയരി)",
+      price: 550,
+      originalPrice: 600,
+      unit: "10 Kg ചാക്ക്",
       image: PRODUCT_IMAGE_PRESETS[0].url,
       description: "",
       inStock: true,
@@ -290,7 +290,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <label className="font-semibold text-foreground">ഉൽപ്പന്നത്തിന്റെ പേര് (മലയാളത്തിൽ) *</label>
               <Input
                 type="text"
-                placeholder="ഉദാ: നാടൻ വെളിച്ചെണ്ണ / കൽപ്പാത്തി മട്ടയരി"
+                placeholder="ഉദാ: രണ്ടാം വിള നാടൻ കുത്തരി - 10 Kg / 25 Kg"
                 value={newProduct.nameMl}
                 onChange={(e) => setNewProduct({ ...newProduct, nameMl: e.target.value })}
                 required
@@ -302,7 +302,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <label className="font-semibold text-foreground">പേര് (English - ഓപ്ഷണൽ)</label>
               <Input
                 type="text"
-                placeholder="eg: Cold-Pressed Coconut Oil"
+                placeholder="eg: Second Crop Matta Rice - 25 Kg Sack"
                 value={newProduct.nameEn}
                 onChange={(e) => setNewProduct({ ...newProduct, nameEn: e.target.value })}
                 className="h-10 text-sm"
@@ -317,13 +317,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
                   className="w-full h-10 px-3 rounded-lg border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-emerald-600"
                 >
-                  <option value="ജൈവ പച്ചക്കറികൾ">ജൈവ പച്ചക്കറികൾ (Vegetables)</option>
-                  <option value="പ്രകൃതിദത്ത എണ്ണകൾ">പ്രകൃതിദത്ത എണ്ണകൾ (Oils & Ghee)</option>
-                  <option value="പരമ്പരാഗത പലഹാരങ്ങൾ">പരമ്പരാഗത പലഹാരങ്ങൾ (Traditional)</option>
-                  <option value="ധാന്യങ്ങൾ">ധാന്യങ്ങൾ (Rice & Millets)</option>
-                  <option value="മസാലകൾ">മസാലകൾ (Spices & Podi)</option>
-                  <option value="ഇക്കോ ക്ലീനിംഗ്">ഇക്കോ ക്ലീനിംഗ് (Eco Living)</option>
-                  <option value="മറ്റുള്ളവ">മറ്റുള്ളവ (Others)</option>
+                  <option value="നാടൻ കുത്തരി (മട്ടയരി)">നാടൻ കുത്തരി (മട്ടയരി)</option>
+                  <option value="അരിപ്പൊടികളും അവലും">അരിപ്പൊടികളും അവലും</option>
+                  <option value="മറ്റ് കാർഷിക ഉൽപ്പന്നങ്ങൾ">മറ്റ് കാർഷിക ഉൽപ്പന്നങ്ങൾ</option>
                 </select>
               </div>
 
@@ -331,7 +327,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <label className="font-semibold text-foreground">അളവ് / യൂണിറ്റ് (Unit) *</label>
                 <Input
                   type="text"
-                  placeholder="ഉദാ: 1 Kg, 500 ml, 1 Packet"
+                  placeholder="ഉദാ: 10 Kg ചാക്ക്, 25 Kg ചാക്ക്, 50 Kg വലിയ ചാക്ക്"
                   value={newProduct.unit}
                   onChange={(e) => setNewProduct({ ...newProduct, unit: e.target.value })}
                   required
@@ -627,7 +623,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         വിളിക്കുക
                       </a>
                       <a
-                        href={`https://wa.me/91${order.customer.phone}?text=പാലക്കാട് എക്കോ ഷോപ്പിൽ നിന്നുള്ള ഓർഡർ #${order.id} സംബന്ധിച്ച്:`}
+                        href={`https://wa.me/91${order.customer.phone}?text=ടീം പാഡി പാലക്കാട് നിന്നുള്ള അരി ഓർഡർ #${order.id} സംബന്ധിച്ച്:`}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-semibold text-xs"

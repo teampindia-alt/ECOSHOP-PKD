@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Lock, KeyRound, ShieldAlert, ArrowRight, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { Lock, KeyRound, ShieldAlert, ArrowRight, Eye, EyeOff, ShieldCheck, Wheat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -12,7 +12,7 @@ interface AdminLoginGateProps {
 }
 
 export const AdminLoginGate: React.FC<AdminLoginGateProps> = ({
-  currentPassword = "palakkad@eco",
+  currentPassword = "teampaddy@pkd",
   onSuccess,
   onCancel,
 }) => {
@@ -31,22 +31,22 @@ export const AdminLoginGate: React.FC<AdminLoginGateProps> = ({
       setError("");
       onSuccess();
     } else {
-      setError("തെറ്റായ അഡ്മിൻ പാസ്‌വേഡ്! വീണ്ടും ശ്രമിക്കുക.");
+      setError("തെറ്റായ അഡ്മിൻ പാസ്‌വേഡ്! വീണ്ടും പരിശോധിക്കുക.");
     }
   };
 
   return (
     <div className="max-w-md mx-auto my-12 p-6 sm:p-8 bg-card rounded-3xl border shadow-xl text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
       {/* Icon */}
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-700 to-teal-900 text-white flex items-center justify-center mx-auto shadow-md">
-        <Lock className="w-8 h-8 text-emerald-200" />
+      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-600 via-emerald-800 to-emerald-950 text-white flex items-center justify-center mx-auto shadow-md">
+        <Wheat className="w-8 h-8 text-amber-300" />
       </div>
 
       {/* Title */}
       <div>
-        <h2 className="text-xl font-bold text-foreground">ഷോപ്പ് അഡ്മിൻ ലോഗിൻ</h2>
+        <h2 className="text-xl font-bold text-foreground">ടീം പാഡി - കർഷക അഡ്മിൻ</h2>
         <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto leading-relaxed">
-          ഉൽപ്പന്നങ്ങൾ ചേർക്കാനും വില മാറ്റാനും വരുന്ന ഓർഡറുകൾ കാണാനും അഡ്മിൻ പാസ്‌വേഡ് നൽകുക.
+          പാലക്കാട്ടെ കർഷക കൂട്ടായ്മയ്ക്ക് വരുന്ന അരി ഓർഡറുകൾ കാണാനും, വിലയും സ്റ്റോക്കും മാറ്റാനും അഡ്മിൻ പാസ്‌വേഡ് നൽകുക.
         </p>
       </div>
 
@@ -92,7 +92,7 @@ export const AdminLoginGate: React.FC<AdminLoginGateProps> = ({
         <div className="space-y-2 pt-2">
           <Button
             type="submit"
-            className="w-full h-11 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-sm shadow-md"
+            className="w-full h-11 bg-emerald-800 hover:bg-emerald-900 text-white font-bold rounded-xl text-sm shadow-md"
           >
             <span>അഡ്മിൻ പാനലിലേക്ക് പ്രവേശിക്കുക</span>
             <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -113,7 +113,7 @@ export const AdminLoginGate: React.FC<AdminLoginGateProps> = ({
       <div className="pt-2 border-t text-[11px] text-muted-foreground/80 flex items-center justify-center gap-1.5">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
         <span>
-          നിലവിലെ ഡിഫോൾട്ട് പാസ്‌വേഡ്: <strong className="font-mono text-foreground">palakkad@eco</strong>
+          ഡിഫോൾട്ട് പാസ്‌വേഡ്: <strong className="font-mono text-foreground">teampaddy@pkd</strong>
         </span>
       </div>
     </div>

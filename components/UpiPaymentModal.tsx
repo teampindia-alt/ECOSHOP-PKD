@@ -30,7 +30,7 @@ export const UpiPaymentModal: React.FC<UpiPaymentModalProps> = ({
   // Standard UPI deep link URL
   const upiUrl = `upi://pay?pa=${encodeURIComponent(shopUpiId)}&pn=${encodeURIComponent(
     shopName
-  )}&am=${amount}&cu=INR&tn=PalakkadEcoShop`;
+  )}&am=${amount}&cu=INR&tn=TeamPaddyPalakkad`;
 
   // QR Code image URL via secure QR server
   const qrCodeImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=${encodeURIComponent(
@@ -58,7 +58,7 @@ export const UpiPaymentModal: React.FC<UpiPaymentModalProps> = ({
             </div>
             <div>
               <h3 className="font-bold text-sm">UPI / GPay പേയ്‌മെന്റ്</h3>
-              <p className="text-[11px] text-emerald-200">Palakkad Eco Shop QR</p>
+              <p className="text-[11px] text-emerald-200">Team Paddy Palakkad QR</p>
             </div>
           </div>
           <button

@@ -2,7 +2,7 @@
 
 import React from "react";
 import {
-  Leaf,
+  Wheat,
   ShoppingBag,
   User,
   Store,
@@ -11,6 +11,7 @@ import {
   LogIn,
   LogOut,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -47,12 +48,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* PWA Install Banner */}
       <InstallPwaPrompt />
 
-      {/* Top Palakkad delivery banner */}
-      <div className="bg-emerald-800 text-emerald-50 px-4 py-1.5 text-xs text-center font-medium flex items-center justify-center gap-2">
-        <MapPin className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
+      {/* Top Announcement Bar */}
+      <div className="bg-emerald-900 text-emerald-100 px-4 py-1.5 text-xs text-center font-medium flex items-center justify-center gap-2">
+        <span className="text-amber-400">🌾</span>
         <span className="truncate">
           {announcement ||
-            "പാലക്കാട് ടൗൺ, ഒലവക്കോട്, കൽപ്പാത്തി, പുതുശ്ശേരി & സമീപ പ്രദേശങ്ങളിൽ ഹോം ഡെലിവറി ലഭ്യമാണ്!"}
+            "പാലക്കാട് നഗരസഭയിലെ കർഷകരുടെ രണ്ടാം വിള നാടൻ കുത്തരി വീട്ടുപടിക്കൽ എത്തിക്കുന്നു!"}
         </span>
       </div>
 
@@ -62,23 +63,23 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={() => setActiveTab("shop")}
           className="flex items-center gap-2.5 cursor-pointer select-none group"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
-            <Leaf className="w-5 h-5 text-emerald-100" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 via-emerald-700 to-emerald-900 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+            <Wheat className="w-5 h-5 text-amber-200" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-base md:text-lg tracking-tight text-emerald-950 dark:text-emerald-50">
-                പാലക്കാട് എക്കോ ഷോപ്പ്
+              <span className="font-extrabold text-base md:text-lg tracking-tight text-emerald-950 dark:text-emerald-50">
+                ടീം പാഡി പാലക്കാട്
               </span>
               <Badge
                 variant="outline"
-                className="hidden sm:inline-flex text-[10px] bg-emerald-50 text-emerald-700 border-emerald-200"
+                className="hidden sm:inline-flex text-[10px] bg-amber-50 text-amber-900 border-amber-300 font-bold"
               >
-                Eco Shop
+                കർഷക കൂട്ടായ്മ
               </Badge>
             </div>
             <p className="text-[11px] text-muted-foreground hidden sm:block">
-              Organic & Eco-friendly Goods • Palakkad
+              പാലക്കാട് നഗരസഭ • രണ്ടാം വിള നാടൻ കുത്തരി വിതരണം
             </p>
           </div>
         </div>
@@ -89,34 +90,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setActiveTab("shop")}
             className={`px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5 transition-all ${
               activeTab === "shop"
-                ? "bg-background text-foreground shadow-xs"
+                ? "bg-background text-foreground shadow-xs font-semibold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Store className="w-4 h-4 text-emerald-600" />
-            <span className="hidden xs:inline">ഷോപ്പ്</span>
+            <Store className="w-4 h-4 text-emerald-700" />
+            <span className="hidden xs:inline">അരി ഓർഡർ ചെയ്യുക</span>
+            <span className="xs:hidden">ഷോപ്പ്</span>
           </button>
           <button
             onClick={() => setActiveTab("my-orders")}
             className={`px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5 transition-all ${
               activeTab === "my-orders"
-                ? "bg-background text-foreground shadow-xs"
+                ? "bg-background text-foreground shadow-xs font-semibold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
             <PackageCheck className="w-4 h-4 text-blue-600" />
-            <span className="hidden xs:inline">ഓർഡറുകൾ</span>
+            <span className="hidden xs:inline">എന്റെ ഓർഡറുകൾ</span>
+            <span className="xs:hidden">ഓർഡറുകൾ</span>
           </button>
           <button
             onClick={() => setActiveTab("admin")}
             className={`px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5 transition-all ${
               activeTab === "admin"
-                ? "bg-emerald-700 text-white shadow-xs font-semibold"
-                : "text-emerald-700 hover:text-emerald-800"
+                ? "bg-emerald-800 text-white shadow-xs font-bold"
+                : "text-emerald-800 hover:text-emerald-900 font-semibold"
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>അഡ്മിൻ പാനൽ</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+            <span>കർഷക അഡ്മിൻ</span>
           </button>
         </nav>
 
@@ -158,7 +161,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               variant="outline"
               size="sm"
               onClick={openAuth}
-              className="text-xs flex items-center gap-1.5 h-8 px-2.5 border-emerald-300 text-emerald-800 dark:text-emerald-200 bg-emerald-50/50 hover:bg-emerald-100"
+              className="text-xs flex items-center gap-1.5 h-8 px-2.5 border-emerald-300 text-emerald-800 dark:text-emerald-200 bg-emerald-50/50 hover:bg-emerald-100 font-semibold"
             >
               <LogIn className="w-3.5 h-3.5" />
               <span>ലോഗിൻ</span>
@@ -169,12 +172,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           <Button
             onClick={openCart}
             size="sm"
-            className="bg-emerald-700 hover:bg-emerald-800 text-white relative shadow-sm h-8"
+            className="bg-emerald-800 hover:bg-emerald-900 text-white relative shadow-sm h-8"
           >
-            <ShoppingBag className="w-4 h-4 mr-1.5" />
+            <ShoppingBag className="w-4 h-4 mr-1.5 text-amber-300" />
             <span className="font-semibold text-xs">₹{cartTotal}</span>
             {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-amber-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
+              <span className="absolute -top-1.5 -right-1.5 bg-amber-500 text-emerald-950 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-background">
                 {cartCount}
               </span>
             )}
