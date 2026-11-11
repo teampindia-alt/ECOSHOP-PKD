@@ -550,7 +550,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <div>
               <h2 className="text-lg font-bold">ഉപഭോക്തൃ ഓർഡറുകൾ (Customer Orders)</h2>
               <p className="text-xs text-muted-foreground">
-                പാലക്കാട് നഗരത്തിൽ നിന്നും വന്ന ഓർഡറുകളും കസ്റ്റമർ ഫോൺ നമ്പറുകളും
+                പാലക്കാട് നിന്നും വന്ന ഓർഡറുകളും കസ്റ്റമർ ഫോൺ നമ്പറുകളും
               </p>
             </div>
             <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">

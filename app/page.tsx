@@ -384,7 +384,7 @@ export default function Home() {
                 </h1>
 
                 <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-xl">
-                  ഇടനിലക്കാരില്ലാതെ പാലക്കാട് നഗരസഭയിലെ കർഷകർ സ്വന്തം പാടത്ത് വിളവെടുത്ത രണ്ടാം വിള നെല്ല്
+                  ഇടനിലക്കാരില്ലാതെ പാലക്കാട്ടെ കർഷകർ സ്വന്തം പാടത്ത് വിളവെടുത്ത രണ്ടാം വിള നെല്ല്
                   പരമ്പരാഗതമായി പുഴുങ്ങി കുത്തിയെടുത്ത മായമില്ലാത്ത തനി നാടൻ മട്ടയരി.
                   10Kg, 25Kg, 50Kg ചാക്കുകളിൽ ഓർഡർ ചെയ്യാം.
                 </p>
@@ -425,7 +425,7 @@ export default function Home() {
                 <div className="flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-emerald-700" />
                   <span>
-                    സ്വാഗതം, <strong>{customer.name}</strong>! പാലക്കാട് നഗരസഭാ പരിധിയിൽ ഡെലിവറി ലഭ്യമാണ്.
+                    സ്വാഗതം, <strong>{customer.name}</strong>! പാലക്കാട് പരിധിയിൽ ഡെലിവറി ലഭ്യമാണ്.
                   </span>
                 </div>
                 <button

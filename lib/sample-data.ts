@@ -14,8 +14,8 @@ export const DEFAULT_SHOP_SETTINGS: ShopSettings = {
 export const PALAKKAD_DELIVERY_ZONES: DeliveryZone[] = [
   {
     id: "pkd-muni-central",
-    nameMl: "പാലക്കാട് നഗരസഭ സെൻട്രൽ (സുൽത്താൻപേട്ട / വലിയങ്ങാടി / ടൗൺ)",
-    nameEn: "Palakkad Municipality Central",
+    nameMl: "പാലക്കാട് ടൗൺ സെൻട്രൽ (സുൽത്താൻപേട്ട / വലിയങ്ങാടി / ടൗൺ)",
+    nameEn: "Palakkad Town Central",
     pincode: "678001",
     deliveryFee: 30,
     minFreeDelivery: 500,
@@ -87,7 +87,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     originalPrice: 620,
     unit: "10 Kg ചാക്ക്",
     image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80",
-    description: "പാലക്കാട് നഗരസഭയിലെ കർഷകർ സ്വന്തം പാടശേഖരത്തിൽ വിളവെടുത്ത രണ്ടാം വിള നെല്ല് പരമ്പരാഗത രീതിയിൽ പുഴുങ്ങി കുത്തിയെടുത്ത തവിടുള്ള ഒന്നാംതരം നാടൻ കുത്തരി. മായമില്ലാത്ത ശുദ്ധമായ ഉൽപ്പന്നം.",
+    description: "പാലക്കാട്ടെ കർഷകർ സ്വന്തം പാടശേഖരത്തിൽ വിളവെടുത്ത രണ്ടാം വിള നെല്ല് പരമ്പരാഗത രീതിയിൽ പുഴുങ്ങി കുത്തിയെടുത്ത തവിടുള്ള ഒന്നാംതരം നാടൻ കുത്തരി. മായമില്ലാത്ത ശുദ്ധമായ ഉൽപ്പന്നം.",
     inStock: true,
     featured: true,
   },
@@ -113,7 +113,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     originalPrice: 2900,
     unit: "50 Kg വലിയ ചാക്ക്",
     image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=800&q=80",
-    description: "ഏറ്റവും കുറഞ്ഞ ഫാം നിരക്കിൽ ലഭിക്കുന്ന 50 കിലോ വലിയ ചാക്ക്. വലിയ കുടുംബങ്ങൾക്കും ഹോട്ടലുകൾക്കും ഓർഡർ ചെയ്യാം. പാലക്കാട് നഗരപരിധിയിൽ സൗജന്യ ഡോർ ഡെലിവറി.",
+    description: "ഏറ്റവും കുറഞ്ഞ ഫാം നിരക്കിൽ ലഭിക്കുന്ന 50 കിലോ വലിയ ചാക്ക്. വലിയ കുടുംബങ്ങൾക്കും ഹോട്ടലുകൾക്കും ഓർഡർ ചെയ്യാം. പാലക്കാട് പരിധിയിൽ സൗജന്യ ഡോർ ഡെലിവറി.",
     inStock: true,
     featured: true,
   },
