@@ -738,7 +738,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               </label>
               <Input
                 type="text"
-                placeholder="ഉദാ: 9447012345@oksbi അല്ലെങ്കിൽ ecoshop@upi"
+                placeholder="ഉദാ: 9447012345@oksbi അല്ലെങ്കിൽ teampaddy@upi"
                 value={settingsForm.upiId}
                 onChange={(e) => setSettingsForm({ ...settingsForm, upiId: e.target.value })}
                 required
