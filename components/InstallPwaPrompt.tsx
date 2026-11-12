@@ -48,7 +48,7 @@ export const InstallPwaPrompt: React.FC = () => {
         <div>
           <span className="font-semibold">ടീം പാഡി പാലക്കാട് മൊബൈൽ ആപ്പ്</span>
           <span className="hidden sm:inline text-emerald-200 ml-1.5">
-            • രണ്ടാം വിള നാടൻ കുത്തരി ഫോണിലൂടെ വേഗത്തിൽ ഓർഡർ ചെയ്യാൻ ഇൻസ്റ്റാൾ ചെയ്യാം!
+            • നാടൻ കുത്തരി ഫോണിലൂടെ വേഗത്തിൽ ഓർഡർ ചെയ്യാൻ ഇൻസ്റ്റാൾ ചെയ്യാം!
           </span>
         </div>
       </div>

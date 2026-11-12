@@ -143,7 +143,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
                 <p className="font-semibold text-sm">നിങ്ങളുടെ കാർട്ട് കാലിയാണ്!</p>
                 <p className="text-xs text-muted-foreground max-w-xs mx-auto">
-                  ടീം പാടിയുടെ രണ്ടാം വിള നാടൻ കുത്തരി ചാക്കുകൾ കാർട്ടിലേക്ക് ചേർക്കൂ.
+                  ടീം പാടിയുടെ നാടൻ കുത്തരി ചാക്കുകൾ കാർട്ടിലേക്ക് ചേർക്കൂ.
                 </p>
                 <Button
                   variant="outline"

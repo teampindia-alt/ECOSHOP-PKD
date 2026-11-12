@@ -379,12 +379,12 @@ export default function Home() {
                 </div>
 
                 <h1 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">
-                  രണ്ടാം വിള നാടൻ കുത്തരി, <br />
+                  നാടൻ കുത്തരി, <br />
                   <span className="text-amber-300">പാടത്തുനിന്ന് നേരിട്ട് നിങ്ങളുടെ വീട്ടിലേക്ക്!</span>
                 </h1>
 
                 <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed max-w-xl">
-                  ഇടനിലക്കാരില്ലാതെ പാലക്കാട്ടെ കർഷകർ സ്വന്തം പാടത്ത് വിളവെടുത്ത രണ്ടാം വിള നെല്ല്
+                  ഇടനിലക്കാരില്ലാതെ പാലക്കാട്ടെ കർഷകർ സ്വന്തം പാടത്ത് വിളവെടുത്ത നെല്ല്
                   പരമ്പരാഗതമായി പുഴുങ്ങി കുത്തിയെടുത്ത മായമില്ലാത്ത തനി നാടൻ മട്ടയരി.
                   10Kg, 25Kg, 50Kg ചാക്കുകളിൽ ഓർഡർ ചെയ്യാം.
                 </p>
@@ -481,7 +481,7 @@ export default function Home() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold text-base sm:text-lg flex items-center gap-2">
-                  <span>രണ്ടാം വിള നാടൻ മട്ടയരി & ഉൽപ്പന്നങ്ങൾ</span>
+                  <span>നാടൻ മട്ടയരി & ഉൽപ്പന്നങ്ങൾ</span>
                   <span className="text-xs text-muted-foreground font-normal">
                     ({filteredProducts.length} ഇനങ്ങൾ)
                   </span>

@@ -53,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <span className="text-amber-400">🌾</span>
         <span className="truncate">
           {announcement ||
-            "പാലക്കാട്ടെ രണ്ടാം വിള നാടൻ കുത്തരി വീട്ടുപടിക്കൽ എത്തിക്കുന്നു!"}
+            "പാലക്കാട്ടെ നാടൻ കുത്തരി വീട്ടുപടിക്കൽ എത്തിക്കുന്നു!"}
         </span>
       </div>
 

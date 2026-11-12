@@ -290,7 +290,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <label className="font-semibold text-foreground">ഉൽപ്പന്നത്തിന്റെ പേര് (മലയാളത്തിൽ) *</label>
               <Input
                 type="text"
-                placeholder="ഉദാ: രണ്ടാം വിള നാടൻ കുത്തരി - 10 Kg / 25 Kg"
+                placeholder="ഉദാ: നാടൻ കുത്തരി - 10 Kg / 25 Kg"
                 value={newProduct.nameMl}
                 onChange={(e) => setNewProduct({ ...newProduct, nameMl: e.target.value })}
                 required
@@ -302,7 +302,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <label className="font-semibold text-foreground">പേര് (English - ഓപ്ഷണൽ)</label>
               <Input
                 type="text"
-                placeholder="eg: Second Crop Matta Rice - 25 Kg Sack"
+                placeholder="eg: Palakkad Matta Rice - 25 Kg Sack"
                 value={newProduct.nameEn}
                 onChange={(e) => setNewProduct({ ...newProduct, nameEn: e.target.value })}
                 className="h-10 text-sm"
